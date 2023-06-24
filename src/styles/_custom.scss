@@ -1,0 +1,99 @@
+// Here you can add other styles
+body {
+  font-size: 11px;
+}
+
+.spinner-cs {
+  position: fixed;
+  z-index: 9999;
+  height: 100%;
+  width: 100%;
+  background-color: rgba($color: #ecf0f1, $alpha: .3);
+}
+
+.card-header span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.title-fs {
+  font-size: 14px;
+}
+
+.td-striped {
+  width: 85%;
+  background-color: rgba(155, 171, 184, .1) !important;
+  border-radius: 4px;
+}
+
+.border-radius-cs {
+  border-radius: 4px;
+}
+
+/**
+* GOod table vue
+*/
+table.vgt-table {
+  font-size: 12px !important;
+}
+
+.vgt-wrap__footer,
+.vgt-wrap__footer .footer__navigation,
+.vgt-wrap__footer .footer__navigation__page-btn span,
+.vgt-wrap__footer .footer__row-count__select,
+button,
+label,
+select,
+textarea,
+input {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+
+/**
+* date picket vue js
+* https://github.com/mengxiong10/vue-datepicker-next
+* */
+.mx-datepicker {
+  width: 100% !important;
+}
+
+/**
+* Transition vue js
+* */
+
+
+.fade-x-enter,
+.fade-x-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.fade-x-enter-active,
+.fade-x-leave-to {
+  transition: opacity 0.2s, transform 0.3s;
+}
+
+.fade-x-enter-active {
+  transition-delay: 0.2s;
+}
+
+.shrink-enter,
+.shrink-leave-to {
+  // transform: scale(1.12);
+  opacity: 0;
+}
+
+.shrink-enter-active,
+.shrink-leave-active {
+  transition: transform 0.5s, opacity 0.3s;
+}
+
+.sidebar:not(.sidebar-end)~* {
+  --cui-sidebar-occupy-start: 14rem;
+}
+
+.text-dark-cs {
+  color: #34495e;
+}
