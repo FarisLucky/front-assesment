@@ -45,49 +45,62 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(penilaian) in penilaians"
-                                        :key="penilaian.id"
+                                        v-for="tipe in penilaians"
+                                        :key="tipe.id"
                                     >
                                         <td>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <strong class="title-fs pb-2 d-flex">Analisis SWOT</strong>
+                                            <div class="panel-tipe">
+                                                <div class="panel-header">
+                                                    <strong class="title-fs pb-2">{{ tipe.nama }}</strong>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <CFormTextarea
-                                                        label="Strenght/ Kelebihan"
-                                                        rows="3"
-                                                        text="Silahkan diisi apabila terdapat catatan"
-                                                        v-model="form.kelebihan"
+                                                <div class="panel-body">
+                                                    <div
+                                                        v-for="penilaian in tipe.relationship?.m_penilaian"
+                                                        :key="penilaian.id"
+                                                        class="penilaian-item"
                                                     >
-                                                    </CFormTextarea>
+                                                        <div class="d-flex justify-content-between">
+                                                            <strong class="penilaian-nama pb-2">{{ penilaian.nama }}</strong>
+                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li
+                                                                v-for="sub_penilaian in penilaian.relationship.sub_penilaian"
+                                                                :key="sub_penilaian.id"
+                                                                class="list-group-item"
+                                                            >
+                                                                <span
+                                                                    class="d-inline-block"
+                                                                    style="width: 80%;"
+                                                                >{{ sub_penilaian.nama }}</span>
+                                                                <div class="d-inline-block">
+                                                                    <CFormInput
+                                                                        type="number"
+                                                                        size="sm"
+                                                                        v-model="sub_penilaian.nilai"
+                                                                        :ttlNilai="ttlNilai + sub_penilaian.nilai"
+                                                                    />
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="penilaian-jumlah">
+                                                            <span
+                                                                class="d-inline-block"
+                                                                style="width: 80%;"
+                                                            >Jumlah</span>
+                                                            <span>{{ ttlNilai }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <CFormTextarea
-                                                        label="Weakness/ Kekurangan"
-                                                        rows="3"
-                                                        text="Silahkan diisi apabila terdapat catatan"
-                                                        v-model="form.kekurangan"
-                                                    >
-                                                    </CFormTextarea>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <CFormTextarea
-                                                        label="Oportunity/ Kesempatan"
-                                                        rows="3"
-                                                        text="Silahkan diisi apabila terdapat catatan"
-                                                        v-model="form.kesempatan"
-                                                    >
-                                                    </CFormTextarea>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <CFormTextarea
-                                                        label="Threat/ Ancaman"
-                                                        rows="3"
-                                                        text="Silahkan diisi apabila terdapat catatan"
-                                                        v-model="form.ancaman"
-                                                    >
-                                                    </CFormTextarea>
+                                                <div class="panel-footer">
+                                                    <div class="penilaian-catatan">
+                                                        <CFormTextarea
+                                                            label="Catatan"
+                                                            rows="2"
+                                                            text="Silahkan diisi apabila terdapat catatan"
+                                                            v-model="tipe.catatan"
+                                                        >
+                                                        </CFormTextarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -301,3 +314,35 @@ export default {
     },
 }
 </script>
+<style>
+.penilaian-item,
+.penilaian-catatan {
+    margin: 0 10px;
+}
+.panel-header {
+    border-bottom: 1px solid rgba(195, 195, 195, 0.4);
+}
+.penilaian-nama {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0.3rem 0;
+}
+.panel-tipe {
+    background: rgba(222, 229, 232, 0.4);
+    padding: 0.7rem 0.4rem;
+    border-radius: 0.4rem;
+    padding-left: 0.5rem;
+}
+.panel-body {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+.list-group-item {
+    border-radius: 0.4rem !important;
+    background: rgb(255, 255, 255);
+}
+.penilaian-jumlah {
+    padding: 0.5rem 1rem;
+    background: #dcdde1;
+}
+</style>
