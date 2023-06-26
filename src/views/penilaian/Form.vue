@@ -64,8 +64,9 @@
                                                         </div>
                                                         <ul class="list-group list-group-flush">
                                                             <li
-                                                                v-for="sub_penilaian in penilaian.relationship.sub_penilaian"
+                                                                v-for="(sub_penilaian, idx) in penilaian.relationship.sub_penilaian"
                                                                 :key="sub_penilaian.id"
+                                                                :countNilai="nilai.countNilai = 0"
                                                                 class="list-group-item"
                                                             >
                                                                 <span
@@ -77,7 +78,8 @@
                                                                         type="number"
                                                                         size="sm"
                                                                         v-model="sub_penilaian.nilai"
-                                                                        :ttlNilai="ttlNilai + sub_penilaian.nilai"
+                                                                        :ttlNilai="ttlNilai"
+                                                                        :countNilai="nilai.countNilai = ++idx"
                                                                     />
                                                                 </div>
                                                             </li>
@@ -87,7 +89,14 @@
                                                                 class="d-inline-block"
                                                                 style="width: 80%;"
                                                             >Jumlah</span>
-                                                            <span>{{ ttlNilai }}</span>
+                                                            <span>{{ nilai.ttlNilai }}</span>
+                                                        </div>
+                                                        <div class="penilaian-avg">
+                                                            <span
+                                                                class="d-inline-block"
+                                                                style="width: 80%;"
+                                                            >Rata-rata</span>
+                                                            <span>{{ nilai.ttlNilai / nilai.countNilai }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -205,7 +214,10 @@ export default {
             penilaians: [],
             tipe: this.$route.params.tipe,
             level: '',
-            ttlNilai: 0,
+            nilai: {
+                ttlNilai: 0,
+                countNilai: 0,
+            },
         }
     },
     created() {
@@ -272,7 +284,7 @@ export default {
 
             const formRequest = {
                 id_karyawan: this.$route.params.id_karyawan,
-                sub_penilaian: this.penilaians,
+                penilaians: this.penilaians,
                 tipe: this.$route.params.tipe,
             }
 
@@ -311,6 +323,10 @@ export default {
                 },
             }
         },
+
+        ttlNilai(param) {
+            this.nilai.ttlNilai += param
+        },
     },
 }
 </script>
@@ -337,12 +353,18 @@ export default {
     margin-top: 0.5rem;
     margin-bottom: 1rem;
 }
-.list-group-item {
+.list-group {
     border-radius: 0.4rem !important;
+}
+.list-group-item {
     background: rgb(255, 255, 255);
 }
 .penilaian-jumlah {
     padding: 0.5rem 1rem;
-    background: #dcdde1;
+    background: rgba(220, 221, 225, 0.3);
+}
+.penilaian-avg {
+    padding: 0.5rem 1rem;
+    background: rgba(220, 221, 225, 0.5);
 }
 </style>
