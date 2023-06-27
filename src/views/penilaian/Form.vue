@@ -89,14 +89,28 @@
                                                                 class="d-inline-block"
                                                                 style="width: 80%;"
                                                             >Jumlah</span>
-                                                            <span>{{ nilai.ttlNilai }}</span>
+                                                            <div class="d-inline-block">
+                                                              <CFormInput
+                                                                  type="number"
+                                                                  size="sm"
+                                                                  :readonly="true"
+                                                                  v-model="nilai.ttlNilai"
+                                                              />
+                                                            </div>
                                                         </div>
                                                         <div class="penilaian-avg">
                                                             <span
                                                                 class="d-inline-block"
                                                                 style="width: 80%;"
                                                             >Rata-rata</span>
-                                                            <span>{{ nilai.ttlNilai / nilai.countNilai }}</span>
+                                                            <div class="d-inline-block">
+                                                                <CFormInput
+                                                                  type="number"
+                                                                  size="sm"
+                                                                  :readonly="true"
+                                                                  v-model="nilai.ttlNilai"
+                                                              />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -328,6 +342,7 @@ export default {
         ttlNilai(param) {
             this.nilai.ttlNilai += param
         },
+
     },
 }
 </script>

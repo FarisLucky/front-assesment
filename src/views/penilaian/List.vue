@@ -6,6 +6,12 @@
                     <span class="d-inline-block">
                         Penilaian Karyawan
                     </span>
+                    <CButton :color="info" @click.prevent="onRefresh">
+                      <CIcon
+                                    :content="cilSync"
+                                    size="sm"
+                                />
+                    </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
@@ -54,7 +60,7 @@
     </div>
 </template>
 <script>
-import { cilPen, cilTrash, cilUserFollow, cilPenAlt } from '@coreui/icons'
+import { cilPen, cilTrash, cilUserFollow, cilPenAlt, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
@@ -72,6 +78,7 @@ export default {
             cilTrash,
             cilUserFollow,
             cilPenAlt,
+            cilSync,
             tipe: {
                 umum: 'pk_umum',
                 khusus: 'pk_khusus',
@@ -176,7 +183,12 @@ export default {
             'setTitle',
             'setComponent',
         ]),
+
         ...mapActions(usePenilaianStore, ['setId']),
+
+        onRefresh(){
+          this.fetchData()
+        },
 
         async fetchData() {
             let query = queryString.stringify(
