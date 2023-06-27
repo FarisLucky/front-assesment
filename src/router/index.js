@@ -458,8 +458,6 @@ router.beforeEach(async (to) => {
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
 
-  useTableStore().reset();
-
   if (authRequired && !auth.getLoggedIn()) {
     auth.returnUrl = to.fullPath;
 

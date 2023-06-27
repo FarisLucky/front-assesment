@@ -155,13 +155,13 @@ export const useTableStore = defineStore('table', {
           this.setTotalRecord(response.data.meta.total)
           this.setRow(rows)
           this.loading(false)
-        }).catch(errors=> {
+        }).catch(errors => {
           useToastStore().showToast({
             show: true,
             classType: 'bg-danger',
             title: 'Gagal',
             msg: errors,
-        })
+          })
           this.loading(false)
         })
     },

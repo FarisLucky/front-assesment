@@ -53,7 +53,7 @@ import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useTableStore } from '@/store/table'
 import { useModalStore } from '@/store/modal'
-import { usePenilaianStore } from '@/store/penilaian'
+import { useHistoryStore } from '@/store/history_penilaian'
 
 export default {
     components: {
@@ -81,10 +81,9 @@ export default {
             'search',
             'selectedRows',
         ]),
-        ...mapState(usePenilaianStore, ['url']),
+        ...mapState(useHistoryStore, ['url']),
     },
     created() {
-        console.log(new Date().getUTCMonth() + 1)
         this.setColumn([
             {
                 label: '#',
@@ -167,7 +166,9 @@ export default {
             'setTitle',
             'setComponent',
         ]),
-        ...mapActions(usePenilaianStore, ['setId']),
+
+        ...mapActions(useHistoryStore, ['setId']),
+
         deleteAll() {
             console.log(this.selectedRows)
         },

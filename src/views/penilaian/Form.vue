@@ -286,6 +286,7 @@ export default {
                 id_karyawan: this.$route.params.id_karyawan,
                 penilaians: this.penilaians,
                 tipe: this.$route.params.tipe,
+                analisis_swot: this.form,
             }
 
             this.store(formRequest)

@@ -19,7 +19,7 @@ ul li {
 }
 </style>
 <template>
-    <div>
+    <div id="penilaian-form">
         <CCard>
             <CCardHeader>
                 <div class="d-flex justify-content-between">
@@ -52,7 +52,7 @@ ul li {
                         :md="12"
                         class="mb-2"
                     >
-                        <ul>
+                        <ul class="data-karyawan">
                             <li>
                                 <span>Nama: <strong>{{ penilaian.nama_karyawan }}</strong></span>
                             </li>
@@ -66,47 +66,190 @@ ul li {
                     </CCol>
                     <CCol :md="12">
                         <table
-                            class="table table-bordered"
+                            class="table"
                             style="width: 100%; border-radius: 10px; border-collapse: collapse;"
                         >
                             <tbody>
                                 <tr
-                                    v-for="(p) in detail"
-                                    :key="p.id"
+                                    v-for="tipe in penilaian.relationship?.tipe_penilaian"
+                                    :key="tipe.id"
                                 >
-                                    <td class="td-striped">
-                                        <strong class="title-fs pb-2 d-flex">{{ p.nama_penilaian }}</strong>
-                                        <ul class="list-group list-group-flush">
-                                            <li
-                                                v-for="(sp) in p.relationship.sub"
-                                                :key="sp.id"
-                                                class="list-group-item border-bottom"
-                                                :ttlNilai="ttlNilai = 0"
-                                            >
-                                                <span
-                                                    class="d-inline-block"
-                                                    style="width: 80%;"
-                                                    :ttlNilai="ttlNilai += sp.nilai"
-                                                >{{ sp.sub_penilaian }}</span>
-                                                <div class="d-inline-block">
-                                                    <strong class="txt_nilai">{{ sp.nilai }}</strong>
+                                    <td>
+                                        <div class="panel-tipe">
+                                            <div class="panel-header">
+                                                <strong class="title-fs pb-2">{{ tipe.nama_tipe }}</strong>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div
+                                                    v-for="detail in tipe.relationship?.detail"
+                                                    :key="detail.id"
+                                                    class="penilaian-item"
+                                                >
+                                                    <div class="d-flex justify-content-between">
+                                                        <strong class="penilaian-nama pb-2">{{ detail.nama_penilaian }}</strong>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li
+                                                            v-for="(sub_penilaian) in detail.relationship?.sub"
+                                                            :key="sub_penilaian.id"
+                                                            class="list-group-item"
+                                                        >
+                                                            <span
+                                                                class="d-inline-block"
+                                                                style="width: 80%;"
+                                                            >{{ sub_penilaian.sub_penilaian }}</span>
+                                                            <div class="d-inline-block">
+                                                                <CFormInput
+                                                                    type="number"
+                                                                    size="sm"
+                                                                    :disabled=true
+                                                                    v-model="sub_penilaian.nilai"
+                                                                />
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="penilaian-jumlah">
+                                                        <span
+                                                            class="d-inline-block"
+                                                            style="width: 80%;"
+                                                        >Jumlah</span>
+                                                        <div class="d-inline-block">
+                                                            <CFormInput
+                                                                type="number"
+                                                                size="sm"
+                                                                :disabled=true
+                                                                :value="detail.ttl_nilai"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="penilaian-avg">
+                                                        <span
+                                                            class="d-inline-block"
+                                                            style="width: 80%;"
+                                                        >Rata-rata</span>
+                                                        <div class="d-inline-block">
+                                                            <CFormInput
+                                                                type="number"
+                                                                size="sm"
+                                                                :disabled=true
+                                                                :value="detail.rata_nilai"
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </li>
-                                            <li class="list-group-item ttl-color">
-                                                <span
-                                                    class="d-inline-block"
-                                                    style="width: 80%;"
-                                                >Jumlah</span>
-                                                <strong class="txt_nilai">{{ ttlNilai }}</strong>
-                                            </li>
-                                        </ul>
-                                        <div class="px-2 py-2">
-                                            <p class="mb-1 ttl-catatan">
-                                                Catatan:
-                                            </p>
-                                            <p class="mb-1 p-3 bg-white">
-                                                {{ p.catatan ?? '-'  }}
-                                            </p>
+                                            </div>
+                                            <div class="panel-footer">
+                                                <div class="penilaian-catatan row">
+                                                    <div class="item col-9">
+                                                        <CFormTextarea
+                                                            label="Catatan"
+                                                            rows="2"
+                                                            :disabled=true
+                                                            :value="tipe.catatan"
+                                                        >
+                                                        </CFormTextarea>
+                                                    </div>
+                                                    <div class="item text-end col">
+                                                        <p>Yang Memberi Penilaian</p>
+                                                        <b class="txt-penilai">{{ tipe.nama_penilai }}</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="panel-tipe">
+                                            <div class="panel-body">
+                                                <div class="penilaian-item">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item">
+                                                            <span
+                                                                class="d-inline-block"
+                                                                style="width: 80%;"
+                                                            >TOTAL RATA RATA NILAI</span>
+                                                            <div class="d-inline-block">
+                                                                <CFormInput
+                                                                    type="number"
+                                                                    size="sm"
+                                                                    :disabled=true
+                                                                    :value="penilaian.ttl_nilai"
+                                                                />
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="panel-tipe">
+                                            <div class="panel-body">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <strong class="title-fs pb-2 d-flex">Analisis SWOT</strong>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <CFormTextarea
+                                                                    label="Strenght/ Kelebihan"
+                                                                    rows="3"
+                                                                    text="Silahkan diisi apabila terdapat catatan"
+                                                                    :value="penilaian.relationship?.analisis_swot?.kelebihan"
+                                                                    :disabled="true"
+                                                                >
+                                                                </CFormTextarea>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <CFormTextarea
+                                                                    label="Weakness/ Kekurangan"
+                                                                    rows="3"
+                                                                    text="Silahkan diisi apabila terdapat catatan"
+                                                                    :value="penilaian.relationship?.analisis_swot?.kekurangan"
+                                                                    :disabled="true"
+                                                                >
+                                                                </CFormTextarea>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <CFormTextarea
+                                                                    label="Oportunity/ Kesempatan"
+                                                                    rows="3"
+                                                                    text="Silahkan diisi apabila terdapat catatan"
+                                                                    :value="penilaian.relationship?.analisis_swot?.kesempatan"
+                                                                    :disabled="true"
+                                                                >
+                                                                </CFormTextarea>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <CFormTextarea
+                                                                    label="Threat/ Ancaman"
+                                                                    rows="3"
+                                                                    text="Silahkan diisi apabila terdapat catatan"
+                                                                    :value="penilaian.relationship?.analisis_swot?.ancaman"
+                                                                    :disabled="true"
+                                                                >
+                                                                </CFormTextarea>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="text-end">
+                                            <p class="mb-1">Kraksaan, <strong>{{ penilaian.created_at }}</strong></p>
+                                            <p
+                                                class="mb-1"
+                                                style="text-transform: capitalize;"
+                                            >Yang melaksanakan penilaian</p>
+                                            <b class="txt-penilai">{{ penilaian.nama_penilai }}</b>
                                         </div>
                                     </td>
                                 </tr>
@@ -151,16 +294,15 @@ export default {
             ttlNilai: 0,
         }
     },
-    created() {
-        // this.onShow()
-    },
     computed: {
-        ...mapState(useHistoryStore, ['url', 'validate']),
+        ...mapState(useHistoryStore, ['url', 'validate', 'form']),
+
         getTextLink() {
             return this.$route.params.tipe === 'pk_khusus'
                 ? 'pk_umum'
                 : 'pk_khusus'
         },
+
         routeName() {
             return this.$route.params.tipe === 'pk_khusus'
                 ? 'ShowUmumHistory'
@@ -176,16 +318,22 @@ export default {
             'getPenilaian',
             'setIdKaryawan',
         ]),
+
         ...mapActions(useJabatanStore, {
             jabatanFetch: 'fetchData',
         }),
+
         ...mapActions(useUnitStore, {
             unitFetch: 'fetchData',
         }),
+
         ...mapActions(useSpinnerStore, ['loading']),
+
         ...mapActions(useToastStore, ['showToast']),
 
         onShow() {
+            this.loading(true)
+
             this.show({
                 id_karyawan: this.$route.params.id_karyawan,
                 tipe: this.$route.params.tipe,
@@ -195,7 +343,8 @@ export default {
                 .then((response) => {
                     console.log(response)
                     this.penilaian = response.data
-                    this.detail = this.penilaian.relationship.detail
+                    // this.detail = this.penilaian.relationship.detail
+                    this.loading(false)
                 })
                 .catch((errors) => {
                     console.log(errors)
@@ -205,7 +354,8 @@ export default {
                         title: 'Gagal',
                         msg: 'Tidak ada data',
                     })
-                    this.$router.back()
+                    this.loading(false)
+                    // this.$router.back()
                 })
         },
     },
@@ -214,3 +364,58 @@ export default {
     },
 }
 </script>
+
+<style>
+.penilaian-item,
+.penilaian-catatan {
+    margin: 0 10px;
+}
+.penilaian-catatan .item {
+    width: 50%;
+}
+.panel-header {
+    border-bottom: 1px solid rgba(195, 195, 195, 0.4);
+}
+.penilaian-nama {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0.3rem 0;
+}
+.panel-tipe {
+    background: rgba(222, 229, 232, 0.4);
+    padding: 0.7rem 0.4rem;
+    border-radius: 0.4rem;
+    padding-left: 0.5rem;
+}
+.panel-body {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+.list-group {
+    border-radius: 0.4rem !important;
+}
+.list-group-item {
+    background: rgb(255, 255, 255);
+}
+.penilaian-jumlah {
+    padding: 0.5rem 1rem;
+    background: rgba(220, 221, 225, 0.3);
+}
+.penilaian-avg {
+    padding: 0.5rem 1rem;
+    background: rgba(220, 221, 225, 0.5);
+}
+.form-control:disabled {
+    background-color: #d8dbe07d;
+}
+.data-karyawan li {
+    font-size: 13px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(148, 148, 148, 0.8);
+}
+
+.txt-penilai {
+    margin-top: 4rem;
+    display: inline-block;
+}
+</style>

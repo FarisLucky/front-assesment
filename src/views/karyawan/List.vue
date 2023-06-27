@@ -195,7 +195,9 @@ export default {
             'setTitle',
             'setComponent',
         ]),
+
         ...mapActions(useKaryawansStore, ['setId']),
+
         deleteAll() {
             console.log(this.selectedRows)
         },
