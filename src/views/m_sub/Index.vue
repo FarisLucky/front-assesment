@@ -1,13 +1,5 @@
 <template>
-    <div class="row position-relative">
-        <div class="col-md-12">
-            <Form></Form>
-        </div>
-        <div class="col-md-12">
-            <List />
-        </div>
-    </div>
-    <Modal></Modal>
+    <List />
 </template>
 <script>
 import List from './List.vue'

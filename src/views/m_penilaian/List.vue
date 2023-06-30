@@ -1,4 +1,5 @@
 <template>
+    <Form @fetch="onRefresh"></Form>
     <div>
         <CCard class="mb-4">
             <CCardHeader>
@@ -6,60 +7,28 @@
                     <span class="d-inline-block">
                         Master Penilaian
                     </span>
+                    <CButton color="light" @click.prevent="onRefresh">
+                        <CIcon :content="cilSync" size="sm" />
+                    </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
-                <vue-good-table
-                    mode="remote"
-                    :totalRows="totalRecords"
-                    :pagination-options="paginations"
-                    :isLoading="isLoading"
-                    :columns="columns"
-                    :rows="rows"
-                    :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange"
-                    v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter"
-                    v-on:sort-change="onSortChange"
-                    v-on:select-all="onSelectAll"
-                >
-                    <template #table-actions>
-                        <CButton
-                            color="secondary"
-                            class="me-2"
-                            @click.prevent="deleteAll"
-                        >
-                            <CIcon
-                                :content="cilTrash"
-                                size="sm"
-                            />
-                        </CButton>
-                    </template>
+                <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
+                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
+                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
-                            <a
-                                href="javascript:"
-                                @click.prevent="onShow({id: props.row.id})"
-                            >
-                                <CIcon
-                                    :content="cilPencil"
-                                    size="sm"
-                                />
+                            <a href="javascript:" @click.prevent="onShow({ id: props.row.id })">
+                                <CIcon :content="cilPencil" size="sm" />
                             </a>
-                            <a
-                                href="javascript:"
-                                @click.prevent="
-                                      setModal(true);
-                                      setSize('sm');
-                                      setComponent('Delete');
-                                      setId(props.row.id);
-                                  "
-                                class="text-danger"
-                            >
-                                <CIcon
-                                    :content="cilTrash"
-                                    size="sm"
-                                />
+                            <a href="javascript:" @click.prevent="
+                                setModal(true);
+                            setSize('sm');
+                            setComponent('Delete');
+                            setId(props.row.id);
+                            " class="text-danger">
+                                <CIcon :content="cilTrash" size="sm" />
                             </a>
                         </span>
                     </template>
@@ -67,11 +36,13 @@
             </CCardBody>
         </CCard>
     </div>
+    <Modal @fetch="onRefresh"></Modal>
 </template>
 <script>
 import Toast from '../../components/Toast.vue'
 import Modal from './Modal.vue'
-import { cilPencil, cilTrash, cilUserFollow } from '@coreui/icons'
+import Form from './Form.vue'
+import { cilPencil, cilTrash, cilUserFollow, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useMPenilaianStore } from '@/store/m_penilaian'
@@ -86,12 +57,14 @@ export default {
         VueGoodTable,
         Toast,
         Modal,
+        Form
     },
     data() {
         return {
             cilPencil,
             cilTrash,
             cilUserFollow,
+            cilSync,
             isLoading: true,
             serverParams: {
                 columnFilters: {},
@@ -132,20 +105,17 @@ export default {
                 },
                 {
                     label: 'Tipe',
-                    field: 'tipe',
+                    field: 'relationship.tipe_penilaian.nama',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
-                    label: 'Jabatan',
-                    field: 'relationship.jabatan.nama',
-                    sortable: false,
-                },
-                {
-                    label: 'Level',
-                    field: 'level',
-                    sortable: false,
+                    label: 'Jenis',
+                    field: 'tipe',
+                    filterOptions: {
+                        enabled: true,
+                    },
                 },
                 {
                     label: 'Aksi',
@@ -187,9 +157,7 @@ export default {
             this.show(params.id)
                 .then((response) => {
                     this.form.nama = response.data.nama
-                    this.form.tipe = response.data.tipe
-                    this.form.id_jabatan_penilai =
-                        response.data.id_jabatan_penilai
+                    this.form.id_tipe = response.data.id_tipe
 
                     this.setId(response.data.id)
                     this.setMethod('PUT')
@@ -208,6 +176,10 @@ export default {
                     this.resetValidation()
                     this.loading(false)
                 })
+        },
+
+        onRefresh() {
+            this.fetchData()
         },
 
         async fetchData() {

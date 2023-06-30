@@ -8,35 +8,15 @@
             </div>
         </CCardHeader>
         <CCardBody>
-            <CForm
-                method="post"
-                @submit.prevent="onSubmit"
-                autocomplete="off"
-            >
-                <input
-                    type="hidden"
-                    name="__method"
-                    v-model="method"
-                />
-                <input
-                    type="hidden"
-                    name="id"
-                    v-if="method == 'PUT'"
-                    v-model="id"
-                />
+            <CForm method="post" @submit.prevent="onSubmit" autocomplete="off">
+                <input type="hidden" name="__method" v-model="method" />
+                <input type="hidden" name="id" v-if="method == 'PUT'" v-model="id" />
                 <CRow class="align-items-end">
                     <CCol :md="12">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput
-                                id="nama"
-                                type="text"
-                                v-model="form.nama"
-                            />
-                            <div
-                                class="invalid-feedback d-inline-block"
-                                v-if="validate?.nama"
-                            >
+                            <CFormInput id="nama" type="text" v-model="form.nama" />
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.nama">
                                 {{ validate?.nama[0] }}
                             </div>
                         </div>
@@ -44,44 +24,22 @@
                     <CCol :md="12">
                         <div class="mb-1">
                             <CFormLabel for="nama">Tipe</CFormLabel>
-                            <CFormInput
-                                id="nama"
-                                type="text"
-                                v-model="form.tipe"
-                            />
-                            <div
-                                class="invalid-feedback d-inline-block"
-                                v-if="validate?.tipe"
-                            >
+                            <v-select v-model="form.tipe" :options="tipeLists" :reduce="tipe => tipe.id">
+                            </v-select>
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.tipe">
                                 {{ validate?.tipe[0] }}
                             </div>
                         </div>
                     </CCol>
                     <CCol :md="12">
                         <div class="mb-1 text-start">
-                            <CButton
-                                type="submit"
-                                color="primary"
-                                class="mt-1"
-                                style="margin-right: 7px;"
-                            >
-                                <CIcon
-                                    :content="cilSave"
-                                    size="sm"
-                                />
+                            <CButton type="submit" color="primary" class="mt-1" style="margin-right: 7px;">
+                                <CIcon :content="cilSave" size="sm" />
                                 Simpan
                             </CButton>
-                            <CButton
-                                type="reset"
-                                color="secondary"
-                                class="mt-1"
-                                style="margin-right: 7px;"
-                                @click.prevent="onReset"
-                            >
-                                <CIcon
-                                    :content="cilSync"
-                                    size="sm"
-                                />
+                            <CButton type="reset" color="secondary" class="mt-1" style="margin-right: 7px;"
+                                @click.prevent="onReset">
+                                <CIcon :content="cilSync" size="sm" />
                                 Reset
                             </CButton>
                         </div>
@@ -118,6 +76,16 @@ export default {
             cilArrowCircleLeft,
             cilMedicalCross,
             cilX,
+            tipeLists: [
+                {
+                    id: 'pk_khusus',
+                    label: 'Penilaian Khusus'
+                },
+                {
+                    id: 'pk_umum',
+                    label: 'Penilaian Umum'
+                }
+            ],
         }
     },
     computed: {
@@ -128,6 +96,11 @@ export default {
             'method',
             'tipePenilaian',
         ]),
+    },
+    watch: {
+        'form.nama'(newVal) {
+            this.form.nama = newVal.toUpperCase()
+        }
     },
     methods: {
         ...mapActions(useMTipeStore, [
@@ -167,7 +140,6 @@ export default {
                     useTableStore().fetchData() // reload data in table
                     this.setMethod('POST')
                     this.loading(false) // remove spinner loading
-                    this.getTipe()
                 })
                 .catch((errors) => {
                     this.loading(false)
@@ -184,26 +156,6 @@ export default {
                         this.resetForm()
                         this.resetValidation()
                     }
-                })
-        },
-
-        getTipe() {
-            useMTipeStore()
-                .fetchData()
-                .then((response) => {
-                    let data = response.data.data.map((val) => ({
-                        id: val.id,
-                        nama: val.nama.toUpperCase(),
-                    }))
-                    this.tipePenilaian = data
-                })
-                .catch((errors) => {
-                    this.showToast({
-                        show: true,
-                        classType: 'bg-danger',
-                        title: 'Gagal',
-                        msg: errors.response.data.message,
-                    })
                 })
         },
 

@@ -6,34 +6,22 @@
                     <span class="d-inline-block">
                         Histori Penilaian Karyawan
                     </span>
+                    <CButton color="light" @click.prevent="onRefresh">
+                        <CIcon :content="cilSync" size="sm" />
+                    </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
-                <vue-good-table
-                    mode="remote"
-                    :totalRows="totalRecords"
-                    :pagination-options="paginations"
-                    :isLoading="isLoading"
-                    :columns="columns"
-                    :rows="rows"
-                    :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange"
-                    v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter"
-                    v-on:sort-change="onSortChange"
-                    v-on:select-all="onSelectAll"
-                >
+                <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
+                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
+                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
                             <router-link
-                                :to="{name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe, month: month, year: year}}"
-                                class="link-primary"
-                                style="margin-right: 2px;"
-                            >
-                                <CIcon
-                                    :content="cilChevronDoubleRight"
-                                    size="sm"
-                                />
+                                :to="{ name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe, month: month, year: year } }"
+                                class="link-primary" style="margin-right: 2px;">
+                                <CIcon :content="cilChevronDoubleRight" size="sm" />
                             </router-link>
                         </span>
                     </template>
@@ -48,10 +36,10 @@ import {
     cilTrash,
     cilUserFollow,
     cilChevronDoubleRight,
+    cilSync
 } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
-import { useTableStore } from '@/store/table'
 import { useModalStore } from '@/store/modal'
 import { useHistoryStore } from '@/store/history_penilaian'
 import { http } from '@/config'
@@ -67,6 +55,7 @@ export default {
             cilTrash,
             cilUserFollow,
             cilChevronDoubleRight,
+            cilSync,
             tipe: 'pk_umum',
             month: new Date().getUTCMonth() + 1,
             year: new Date().getUTCFullYear(),
@@ -172,6 +161,10 @@ export default {
         ]),
 
         ...mapActions(useHistoryStore, ['setId']),
+
+        onRefresh() {
+            this.fetchData()
+        },
 
         async fetchData() {
             let query = queryString.stringify(

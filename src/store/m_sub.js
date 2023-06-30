@@ -6,11 +6,13 @@ export const useMSubStore = defineStore('m_sub', {
         id: '',
         form: {
             id_penilaian: '',
-            nama: '',
+            nama: [{
+                nama: '',
+                iterate: 1,
+            }],
             id_jabatan_penilai: '',
             id_jabatan_kinerja: '',
             id_unit_penilai: '',
-            moreNama: []
         },
         validate: '',
         url: '/sub-penilaians',
@@ -60,7 +62,10 @@ export const useMSubStore = defineStore('m_sub', {
 
         resetForm() {
             this.form.id_penilaian = ''
-            this.form.nama = ''
+            this.form.nama = [{
+                nama: '',
+                iterate: 1,
+            }]
             this.form.id_jabatan_penilai = ''
             this.form.id_jabatan_kinerja = ''
             this.form.id_unit_penilai = ''

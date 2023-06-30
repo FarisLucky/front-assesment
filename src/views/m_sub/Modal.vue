@@ -1,16 +1,10 @@
 <template>
-    <CModal
-        ref="modal"
-        :visible="modal"
-        @close="setModal(false)"
-        :size="size"
-        scrollable
-    >
+    <CModal ref="modal" :visible="modal" @close="setModal(false)" :size="size" scrollable>
         <CModalHeader>
             <CModalTitle>{{ title }}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <component :is="component"></component>
+            <component @onFetchData="onRefresh" :is="component"></component>
         </CModalBody>
     </CModal>
 </template>
@@ -39,6 +33,9 @@ export default {
             setParams: 'setParams',
             setComponent: 'setComponent',
         }),
+        onRefresh() {
+            this.$emit('onRefresh')
+        }
     },
 }
 </script>

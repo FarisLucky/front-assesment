@@ -1,17 +1,12 @@
 <template>
-    <CModal
-        ref="modal"
-        :visible="modal"
-        @close="setModal(false)"
-        :size="size"
-        scrollable
-    >
+    <CModal ref="modal" :visible="modal" @close="setModal(false)" :size="size" scrollable>
         <CModalHeader>
             <CModalTitle>{{ title }}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <component :is="component"></component>
+            <component @fetchData="onFetch()" :is="component"></component>
         </CModalBody>
+        <button @click="onFetch()">fetch modla</button>
     </CModal>
 </template>
 <script>
@@ -32,6 +27,9 @@ export default {
             'component',
         ]),
     },
+    mounted() {
+        this.$emit('fetch')
+    },
     methods: {
         ...mapActions(useModalStore, {
             setTitle: 'setTitle',
@@ -39,6 +37,10 @@ export default {
             setParams: 'setParams',
             setComponent: 'setComponent',
         }),
+        onFetch() {
+            this.$emit('fetch')
+        },
     },
+
 }
 </script>

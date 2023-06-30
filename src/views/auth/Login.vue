@@ -6,26 +6,16 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardBody>
-                                <CForm
-                                    @submit.prevent="onSubmit()"
-                                    autocomplete="off"
-                                >
+                                <CForm @submit.prevent="onSubmit()" autocomplete="off">
                                     <h1>Login</h1>
                                     <p class="text-medium-emphasis">Sign In to your account</p>
                                     <CInputGroup class="mb-3">
                                         <CInputGroupText>
                                             <CIcon icon="cil-user" />
                                         </CInputGroupText>
-                                        <CFormInput
-                                            type="email"
-                                            placeholder="Email"
-                                            autocomplete="Email"
-                                            v-model="form.email"
-                                        />
-                                        <div
-                                            class="invalid-feedback d-inline-block"
-                                            v-if="validate?.email"
-                                        >
+                                        <CFormInput type="email" placeholder="Email" autocomplete="Email"
+                                            v-model="form.email" />
+                                        <div class="invalid-feedback d-inline-block" v-if="validate?.email">
                                             {{ validate?.email[0] }}
                                         </div>
                                     </CInputGroup>
@@ -33,25 +23,14 @@
                                         <CInputGroupText>
                                             <CIcon icon="cil-lock-locked" />
                                         </CInputGroupText>
-                                        <CFormInput
-                                            type="password"
-                                            placeholder="Password"
-                                            v-model="form.password"
-                                        />
-                                        <div
-                                            class="invalid-feedback d-inline-block"
-                                            v-if="validate?.password"
-                                        >
+                                        <CFormInput type="password" placeholder="Password" v-model="form.password" />
+                                        <div class="invalid-feedback d-inline-block" v-if="validate?.password">
                                             {{ validate?.password[0] }}
                                         </div>
                                     </CInputGroup>
                                     <CRow>
                                         <CCol :xs="6">
-                                            <CButton
-                                                type="submit"
-                                                color="primary"
-                                                class="px-4"
-                                            > Login </CButton>
+                                            <CButton type="submit" color="primary" class="px-4"> Login </CButton>
                                         </CCol>
                                     </CRow>
                                 </CForm>
@@ -81,9 +60,6 @@ export default {
     computed: {
         ...mapState(useAuthStore, ['user', 'form', 'token', 'validate']),
         ...mapState(useSpinnerStore, ['isLoading']),
-    },
-    created() {
-        // useAuthStore().setUser({ name: 'Salman Al Faris' })
     },
     methods: {
         ...mapActions(useAuthStore, [
@@ -129,19 +105,18 @@ export default {
                 })
                 .catch((errors) => {
                     this.loading(false)
-                    console.log(errors)
-                    if (errors.response.status == 422) {
+                    if (errors?.response?.status == 422) {
                         this.setValidation(errors.response.data.errors)
                     } else {
-                        useToastStore.showToast({
+                        useToastStore().showToast({
                             show: true,
                             classType: 'bg-danger',
                             title: 'Gagal',
-                            msg: errors.response.data.message,
+                            msg: errors?.response.data,
                         })
                     }
                 })
         },
-    },
+    }
 }
 </script>

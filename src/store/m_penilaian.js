@@ -6,19 +6,8 @@ export const useMPenilaianStore = defineStore('m_penilaian', {
     id: '',
     form: {
       nama: '',
-      tipe: '',
-      level: '',
+      id_tipe: ''
     },
-    tipeLists: [
-      {
-        id: 'pk_khusus',
-        label: 'Penilaian Khusus'
-      },
-      {
-        id: 'pk_umum',
-        label: 'Penilaian Umum'
-      }
-    ],
     validate: '',
     url: '/penilaians',
     method: 'POST'
@@ -70,8 +59,7 @@ export const useMPenilaianStore = defineStore('m_penilaian', {
 
     resetForm() {
       this.form.nama = ''
-      this.form.tipe = ''
-      this.form.id_jabatan_penilai = ''
+      this.form.id_tipe = ''
       this.form.created_at = ''
       this.form.updated_at = ''
       this.form.deleted_at = ''

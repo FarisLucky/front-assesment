@@ -63,22 +63,10 @@ export const usePenilaianStore = defineStore('penilaian', {
     },
 
     resetForm() {
-      this.form.id_karyawan = ''
-      this.form.jabatan = ''
-      this.form.nama_karyawan = ''
-      this.form.id_penilai = ''
-      this.form.nama_penilai = ''
-      this.form.jabatan_penilai = ''
-      this.form.tgl_nilai = ''
-      this.form.ttl_nilai = ''
-      this.form.rata_nilai = ''
-      this.form.tipe = ''
-      this.form.status = ''
-      this.form.validasi_by = ''
-      this.form.created_by = ''
-      this.form.updated_by = ''
-      this.form.updated_at = ''
-      this.form.deleted_at = ''
+      this.form.kelebihan = ''
+      this.form.kesempatan = ''
+      this.form.kekurangan = ''
+      this.form.ancaman = ''
     },
 
     resetValidation() {
@@ -93,8 +81,5 @@ export const usePenilaianStore = defineStore('penilaian', {
       this.method = method
     },
 
-    setIdKaryawan(id) {
-      this.form.id_karyawan = id
-    }
   }
 })

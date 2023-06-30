@@ -18,6 +18,12 @@ export const useMTipePenilaianStore = defineStore('m_tipe_penilaian', {
       this.id = id
     },
 
+    async fetch() {
+      const tipe = await http.get(this.url)
+
+      return tipe
+    },
+
     async fetchData() {
       const tipe = await http.get(this.url + '/all/data')
 

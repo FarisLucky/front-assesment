@@ -8,92 +8,38 @@
             </div>
         </CCardHeader>
         <CCardBody>
-            <CForm
-                method="post"
-                @submit.prevent="onSubmit"
-                autocomplete="off"
-            >
-                <input
-                    type="hidden"
-                    name="__method"
-                    v-model="method"
-                />
-                <input
-                    type="hidden"
-                    name="id"
-                    v-if="method == 'PUT'"
-                    v-model="id"
-                />
+            <CForm method="post" @submit.prevent="onSubmit" autocomplete="off">
+                <input type="hidden" name="__method" v-model="method" />
+                <input type="hidden" name="id" v-if="method == 'PUT'" v-model="id" />
                 <CRow class="align-items-end">
                     <CCol :md="3">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput
-                                id="nama"
-                                type="text"
-                                v-model="form.nama"
-                            />
-                            <div
-                                class="invalid-feedback d-inline-block"
-                                v-if="validate?.nama"
-                            >
+                            <CFormInput id="nama" type="text" v-model="form.nama" />
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.nama">
                                 {{ validate?.nama[0] }}
                             </div>
                         </div>
                     </CCol>
                     <CCol :md="3">
                         <div class="mb-1">
-                            <CFormLabel for="tipe">Tipe</CFormLabel>
-                            <v-select
-                                v-model="form.tipe"
-                                :options="tipeLists"
-                                :reduce="tipe => tipe.id"
-                            >
+                            <CFormLabel for="tipe">Tipe Penilaian</CFormLabel>
+                            <v-select v-model="form.id_tipe" :options="tipePenilaianList" :reduce="tipe => tipe.id">
                             </v-select>
-                            <div
-                                class="invalid-feedback d-inline-block"
-                                v-if="validate?.tipe"
-                            >
-                                {{ validate?.tipe[0] }}
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.id_tipe">
+                                {{ validate?.id_tipe[0] }}
                             </div>
-                        </div>
-                    </CCol>
-                    <CCol :md="3">
-                        <div class="mb-1">
-                            <CFormLabel for="penilai">Jabatan Penilai / Level</CFormLabel>
-                            <v-select
-                                v-model="form.level"
-                                :options="jabatanLists"
-                                :reduce="jabatan => jabatan.id"
-                            >
-                            </v-select>
                         </div>
                     </CCol>
                     <CCol>
                         <div class="mb-1">
-                            <CButton
-                                type="submit"
-                                color="primary"
-                                class="mt-1"
-                                style="margin-right: 7px;"
-                            >
-                                <CIcon
-                                    :content="cilSave"
-                                    size="sm"
-                                />
+                            <CButton type="submit" color="primary" class="mt-1" style="margin-right: 7px;">
+                                <CIcon :content="cilSave" size="sm" />
                                 Simpan
                             </CButton>
-                            <CButton
-                                type="reset"
-                                color="secondary"
-                                class="mt-1"
-                                style="margin-right: 7px;"
-                                @click.prevent="onReset"
-                            >
-                                <CIcon
-                                    :content="cilSync"
-                                    size="sm"
-                                />
+                            <CButton type="reset" color="secondary" class="mt-1" style="margin-right: 7px;"
+                                @click.prevent="onReset">
+                                <CIcon :content="cilSync" size="sm" />
                                 Reset
                             </CButton>
                         </div>
@@ -109,12 +55,11 @@ import { mapActions } from 'pinia'
 import { mapState } from 'pinia'
 import { useToastStore } from '@/store/toast'
 import { useJabatanStore } from '@/store/jabatan'
-import { useUnitStore } from '@/store/unit'
 import DatePicker from 'vue-datepicker-next'
 import 'vue-datepicker-next/index.css'
 import { useSpinnerStore } from '@/store/spinner'
 import { useMPenilaianStore } from '@/store/m_penilaian'
-import useTableStore from '@/store/table'
+import { useMTipeStore } from '@/store/m_tipe'
 
 export default {
     components: {
@@ -126,6 +71,7 @@ export default {
             cilSync,
             cilArrowCircleLeft,
             jabatanLists: [],
+            tipePenilaianList: []
         }
     },
     computed: {
@@ -146,6 +92,7 @@ export default {
     created() {
         this.resetForm()
         this.getJabatans()
+        this.getTipe()
     },
     methods: {
         ...mapActions(useMPenilaianStore, [
@@ -157,30 +104,40 @@ export default {
             'resetValidation',
         ]),
 
-        ...mapActions(useJabatanStore, {
-            jabatanFetch: 'fetchData',
-        }),
-
-        ...mapActions(useUnitStore, {
-            unitFetch: 'fetchData',
-        }),
-
         ...mapActions(useToastStore, ['showToast']),
 
         ...mapActions(useSpinnerStore, ['loading']),
 
-        ...mapActions(useTableStore, {
-            fetchData: 'fetchData',
-        }),
-
         getJabatans() {
-            this.jabatanFetch()
+            useJabatanStore()
+                .fetchData()
                 .then((response) => {
                     let prepareData = response.data.map((val) => ({
                         id: val.id,
                         label: val.nama + ' / ' + val.level,
                     }))
                     this.jabatanLists = prepareData
+                })
+                .catch((errors) => {
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: errors.response.data.message,
+                    })
+                })
+        },
+
+        getTipe() {
+            useMTipeStore()
+                .fetchData()
+                .then((response) => {
+                    console.log(response)
+                    let prepareData = response.data.data.map((val) => ({
+                        id: val.id,
+                        label: val.nama + ' / ' + val.tipe,
+                    }))
+                    this.tipePenilaianList = prepareData
                 })
                 .catch((errors) => {
                     this.showToast({
@@ -213,7 +170,7 @@ export default {
                     })
                     this.resetForm() // reset form value
                     this.resetValidation() // reset form validation
-                    this.fetchData() // reload data in table
+                    this.onRefresh()
                     this.setMethod('POST')
                     this.loading(false) // remove spinner loading
                 })
@@ -236,10 +193,14 @@ export default {
         },
 
         onReset() {
-            useTableStore().fetchData()
+            this.$emit('fetch') // reload data in table
             this.resetForm()
             this.resetValidation()
         },
+
+        onRefresh() {
+            this.$emit('fetch') // reload data in table
+        }
     },
 }
 </script>

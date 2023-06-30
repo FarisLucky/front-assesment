@@ -5,17 +5,9 @@
         </CCol>
         <CCol :md="12">
             <div class="mb-3 text-end">
-                <CButton
-                    type="button"
-                    color="danger"
-                    class="text-white"
-                    style="margin-right: 7px;"
-                    @click.prevent="onDestroy()"
-                >
-                    <CIcon
-                        :content="cilSave"
-                        size="sm"
-                    />
+                <CButton type="button" color="danger" class="text-white" style="margin-right: 7px;"
+                    @click.prevent="onDestroy()">
+                    <CIcon :content="cilSave" size="sm" />
                     Hapus
                 </CButton>
             </div>
@@ -30,7 +22,6 @@ import { mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
 import { useSpinnerStore } from '@/store/spinner'
 import { useToastStore } from '@/store/toast'
-import useTableStore from '@/store/table'
 
 export default {
     name: 'Delete',
@@ -61,7 +52,7 @@ export default {
                         title: 'Berhasil',
                         msg: 'Tindakan Berhasil !',
                     })
-                    useTableStore().fetchData()
+                    this.onRefresh()
                 })
                 .catch((errors) => {
                     console.log(errors)
@@ -70,6 +61,10 @@ export default {
                     this.setModal(false)
                 })
         },
+
+        onRefresh() {
+            this.$emit('fetchData')
+        }
     },
 }
 </script>

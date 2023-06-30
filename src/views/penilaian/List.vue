@@ -7,50 +7,28 @@
                         Penilaian Karyawan
                     </span>
                     <CButton :color="info" @click.prevent="onRefresh">
-                      <CIcon
-                                    :content="cilSync"
-                                    size="sm"
-                                />
+                        <CIcon :content="cilSync" size="sm" />
                     </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
-                <vue-good-table
-                    mode="remote"
-                    :totalRows="totalRecords"
-                    :pagination-options="paginations"
-                    :isLoading="isLoading"
-                    :columns="columns"
-                    :rows="rows"
-                    :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange"
-                    v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter"
-                    v-on:sort-change="onSortChange"
-                    v-on:select-all="onSelectAll"
-                >
+                <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
+                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
+                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
                             <router-link
                                 v-if="props.row.relationship.pk_umum?.length < 1 || props.row.relationship.pk_umum[0].status == 'draft'"
-                                :to="{name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.umum }}"
-                                class="link-primary"
-                                style="margin-right: 2px;"
-                            >
-                                <CIcon
-                                    :content="cilPen"
-                                    size="sm"
-                                />
+                                :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.umum } }"
+                                class="link-primary" style="margin-right: 2px;">
+                                <CIcon :content="cilPen" size="sm" />
                             </router-link>
                             <router-link
                                 v-if="props.row.relationship.pk_khusus?.length < 1 || props.row.relationship.pk_khusus[0]?.status == 'draft'"
-                                :to="{name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.khusus }}"
-                                class="link-info"
-                            >
-                                <CIcon
-                                    :content="cilPenAlt"
-                                    size="sm"
-                                />
+                                :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.khusus } }"
+                                class="link-info">
+                                <CIcon :content="cilPenAlt" size="sm" />
                             </router-link>
                         </span>
                     </template>
@@ -64,6 +42,7 @@ import { cilPen, cilTrash, cilUserFollow, cilPenAlt, cilSync } from '@coreui/ico
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
+import { useToastStore } from '@/store/toast'
 import { usePenilaianStore } from '@/store/penilaian'
 import { http } from '@/config'
 import queryString from 'query-string'
@@ -186,8 +165,8 @@ export default {
 
         ...mapActions(usePenilaianStore, ['setId']),
 
-        onRefresh(){
-          this.fetchData()
+        onRefresh() {
+            this.fetchData()
         },
 
         async fetchData() {
