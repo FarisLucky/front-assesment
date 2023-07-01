@@ -62,7 +62,6 @@ import { useToastStore } from '@/store/toast'
 import DatePicker from 'vue-datepicker-next'
 import 'vue-datepicker-next/index.css'
 import { useSpinnerStore } from '@/store/spinner'
-import { useTableStore } from '@/store/table'
 import { useMTipeStore } from '@/store/m_tipe'
 
 export default {
@@ -137,7 +136,7 @@ export default {
                     })
                     this.resetForm() // reset form value
                     this.resetValidation() // reset form validation
-                    useTableStore().fetchData() // reload data in table
+                    this.onRefresh() // reload data in table
                     this.setMethod('POST')
                     this.loading(false) // remove spinner loading
                 })
@@ -160,9 +159,13 @@ export default {
         },
 
         onReset() {
-            useTableStore().fetchData()
             this.resetForm()
             this.resetValidation()
+            this.onRefresh()
+        },
+
+        onRefresh() {
+            this.$emit('fetch')
         },
     },
 }

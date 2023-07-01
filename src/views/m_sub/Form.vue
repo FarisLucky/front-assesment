@@ -234,12 +234,11 @@ export default {
 
             action
                 .then((response) => {
-                    console.log(response)
                     this.showToast({
                         show: true,
                         classType: 'bg-success',
                         title: 'Berhasil ditambahkan !',
-                        msg: response,
+                        msg: response.data,
                     })
                     this.resetForm() // reset form value
                     this.resetValidation() // reset form validation
@@ -250,7 +249,6 @@ export default {
                 })
                 .catch((errors) => {
                     this.loading(false)
-                    console.log(errors)
                     if (errors.response.status == 422) {
                         this.setValidation(errors.response.data.errors)
                     } else {

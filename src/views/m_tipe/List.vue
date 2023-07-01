@@ -1,49 +1,51 @@
 <template>
-    <div>
-        <CCard class="mb-4">
-            <CCardHeader>
-                <div class="d-flex justify-content-between">
-                    <span class="d-inline-block">
-                        Master Tipe
-                    </span>
-                    <CButton color="light" @click.prevent="onRefresh">
-                        <CIcon :content="cilSync" size="sm" />
-                    </CButton>
-                </div>
-            </CCardHeader>
-            <CCardBody>
-                <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
-                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
-                    <template #table-actions>
-                        <CButton color="secondary" class="me-2" @click.prevent="deleteAll">
-                            <CIcon :content="cilTrash" size="sm" />
-                        </CButton>
-                    </template>
-                    <template #table-row="props">
-                        <span v-if="props.column.field == 'action'">
-                            <a href="javascript:" @click.prevent="onShow({ id: props.row.id })">
-                                <CIcon :content="cilPencil" size="sm" />
-                            </a>
-                            <a href="javascript:" @click.prevent="
-                                setModal(true);
-                            setSize('sm');
-                            setComponent('Delete');
-                            setId(props.row.id);
-                            " class="text-danger">
-                                <CIcon :content="cilTrash" size="sm" />
-                            </a>
+    <CRow>
+        <CCol md="9">
+            <CCard class="mb-4">
+                <CCardHeader>
+                    <div class="d-flex justify-content-between">
+                        <span class="d-inline-block">
+                            Master Tipe
                         </span>
-                    </template>
-                </vue-good-table>
-            </CCardBody>
-        </CCard>
-    </div>
+                        <CButton color="light" @click.prevent="onRefresh">
+                            <CIcon :content="cilSync" size="sm" />
+                        </CButton>
+                    </div>
+                </CCardHeader>
+                <CCardBody>
+                    <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
+                        :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
+                        v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                        v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
+                        <template #table-row="props">
+                            <span v-if="props.column.field == 'action'">
+                                <a href="javascript:" @click.prevent="onShow({ id: props.row.id })">
+                                    <CIcon :content="cilPencil" size="sm" />
+                                </a>
+                                <a href="javascript:" @click.prevent="
+                                    setModal(true);
+                                setSize('sm');
+                                setComponent('Delete');
+                                setId(props.row.id);
+                                " class="text-danger">
+                                    <CIcon :content="cilTrash" size="sm" />
+                                </a>
+                            </span>
+                        </template>
+                    </vue-good-table>
+                </CCardBody>
+            </CCard>
+        </CCol>
+        <CCol md="3">
+            <Form @fetch="onRefresh"></Form>
+        </CCol>
+    </CRow>
+    <Modal @fetch="onRefresh"></Modal>
 </template>
 <script>
 import Toast from '../../components/Toast.vue'
 import Modal from './Modal.vue'
+import Form from './Form.vue'
 import { cilPencil, cilTrash, cilUserFollow, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
@@ -59,6 +61,7 @@ export default {
         VueGoodTable,
         Toast,
         Modal,
+        Form
     },
     data() {
         return {

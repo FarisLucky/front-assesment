@@ -137,7 +137,7 @@ ul li {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr v-if="$route.params.tipe == 'pk_umum'">
                                     <td>
                                         <div class="panel-tipe">
                                             <div class="panel-body">
@@ -189,6 +189,15 @@ ul li {
                                             <p class="mb-1" style="text-transform: capitalize;">Yang melaksanakan penilaian
                                             </p>
                                             <b class="txt-penilai">{{ penilaian.nama_penilai }}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="text-end">
+                                            <router-link :to="{ name: 'generatePdf' }" class="btn btn-sm btn-warning">
+                                                Cetak Nilai
+                                            </router-link>
                                         </div>
                                     </td>
                                 </tr>
@@ -294,7 +303,8 @@ export default {
                         msg: 'Tidak ada data',
                     })
                     this.loading(false)
-                    // this.$router.back()
+
+                    this.$router.back()
                 })
         },
     },

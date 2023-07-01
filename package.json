@@ -39,6 +39,7 @@
     "vue-multiselect": "^3.0.0-beta.2",
     "vue-router": "^4.1.6",
     "vue-select": "^4.0.0-beta.6",
+    "vue3-html2pdf": "^1.1.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

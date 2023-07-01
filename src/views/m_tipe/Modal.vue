@@ -1,16 +1,10 @@
 <template>
-    <CModal
-        ref="modal"
-        :visible="modal"
-        @close="setModal(false)"
-        :size="size"
-        scrollable
-    >
+    <CModal ref="modal" :visible="modal" @close="setModal(false)" :size="size" scrollable>
         <CModalHeader>
             <CModalTitle>{{ title }}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <component :is="component"></component>
+            <component @fetchData="$emit('fetch')" :is="component"></component>
         </CModalBody>
     </CModal>
 </template>

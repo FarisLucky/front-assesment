@@ -175,6 +175,11 @@ const routes = [
                         name: 'ShowKhususHistory',
                         component: () => import('@/views/history/Form.vue'),
                     },
+                    {
+                        path: '/:id_karyawan/:tipe/:month/:year/generate-pdf',
+                        name: 'generatePdf',
+                        component: () => import('@/views/history/GeneratePdf.vue'),
+                    },
                 ],
             },
             {

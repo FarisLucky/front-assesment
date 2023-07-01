@@ -87,7 +87,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="routeParams.tipe == 'pk_umum'">
                                         <td>
                                             <div class="row">
                                                 <div class="col-12">
