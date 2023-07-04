@@ -21,7 +21,6 @@ import { mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
 import { useSpinnerStore } from '@/store/spinner'
 import { useToastStore } from '@/store/toast'
-import { useTableStore } from '@/store/table'
 import { useMSubStore } from '@/store/m_sub'
 
 export default {
@@ -53,6 +52,7 @@ export default {
                         title: 'Berhasil',
                         msg: 'Tindakan Berhasil !',
                     })
+
                     this.onRefresh()
                 })
                 .catch((errors) => {

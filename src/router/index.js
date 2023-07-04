@@ -146,7 +146,7 @@ const routes = [
                     {
                         path: '',
                         name: 'ListPenilaian',
-                        component: () => import('@/views/penilaian/List.vue'),
+                        component: () => import('@/views/penilaian/ProgressTab.vue'),
                     },
                     {
                         path: '/nilai/:id_karyawan/:tipe',
@@ -177,8 +177,8 @@ const routes = [
                     },
                     {
                         path: '/:id_karyawan/:tipe/:month/:year/generate-pdf',
-                        name: 'generatePdf',
-                        component: () => import('@/views/history/GeneratePdf.vue'),
+                        name: 'GeneratePdf',
+                        component: () => import('@/components/HtmlToPdf.vue'),
                     },
                 ],
             },

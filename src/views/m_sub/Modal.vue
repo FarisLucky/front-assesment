@@ -34,7 +34,7 @@ export default {
             setComponent: 'setComponent',
         }),
         onRefresh() {
-            this.$emit('onRefresh')
+            this.$emit('fetch')
         }
     },
 }

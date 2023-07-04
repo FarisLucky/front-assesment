@@ -42,36 +42,42 @@
                                                 <div class="panel-body">
                                                     <div v-for="penilaian in tipe.relationship?.m_penilaian"
                                                         :key="penilaian.id" class="penilaian-item">
-                                                        <div class="d-flex justify-content-between">
-                                                            <strong class="penilaian-nama pb-2">{{ penilaian.nama
-                                                            }}</strong>
-                                                        </div>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li v-for="(sub_penilaian, idx) in penilaian.relationship.sub_penilaian"
-                                                                :key="sub_penilaian.id" :countNilai="nilai.countNilai = 0"
-                                                                class="list-group-item">
-                                                                <span class="d-inline-block" style="width: 80%;">{{
-                                                                    sub_penilaian.nama }}</span>
-                                                                <div class="d-inline-block">
-                                                                    <CFormInput type="number" size="sm"
-                                                                        v-model="sub_penilaian.nilai" :ttlNilai="ttlNilai"
-                                                                        :countNilai="nilai.countNilai = ++idx" />
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="penilaian-jumlah">
-                                                            <span class="d-inline-block" style="width: 80%;">Jumlah</span>
-                                                            <div class="d-inline-block">
-                                                                <CFormInput type="number" size="sm" :readonly="true"
-                                                                    v-model="nilai.ttlNilai" />
+                                                        <div v-if="penilaian.sub_count > 0">
+                                                            <div class="d-flex justify-content-between">
+                                                                <strong class="penilaian-nama pb-2">{{ penilaian.nama
+                                                                }}</strong>
                                                             </div>
-                                                        </div>
-                                                        <div class="penilaian-avg">
-                                                            <span class="d-inline-block"
-                                                                style="width: 80%;">Rata-rata</span>
-                                                            <div class="d-inline-block">
-                                                                <CFormInput type="number" size="sm" :readonly="true"
-                                                                    v-model="nilai.ttlNilai" />
+                                                            <ul class="list-group list-group-flush">
+                                                                <li v-for="(sub_penilaian, idx) in penilaian.relationship.sub_penilaian"
+                                                                    :key="sub_penilaian.id"
+                                                                    :countNilai="nilai.countNilai = 0"
+                                                                    class="list-group-item">
+                                                                    <span class="d-inline-block" style="width: 80%;">{{
+                                                                        sub_penilaian.nama }}</span>
+                                                                    <div class="d-inline-block">
+                                                                        <CFormInput type="number" size="sm"
+                                                                            v-model="sub_penilaian.nilai"
+                                                                            :ttlNilai="ttlNilai" :value="0"
+                                                                            :disabled="tipe.check < 1"
+                                                                            :countNilai="nilai.countNilai = ++idx" />
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="penilaian-jumlah">
+                                                                <span class="d-inline-block"
+                                                                    style="width: 80%;">Jumlah</span>
+                                                                <div class="d-inline-block">
+                                                                    <CFormInput type="number" size="sm" :readonly="true"
+                                                                        v-model="nilai.ttlNilai" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="penilaian-avg">
+                                                                <span class="d-inline-block"
+                                                                    style="width: 80%;">Rata-rata</span>
+                                                                <div class="d-inline-block">
+                                                                    <CFormInput type="number" size="sm" :readonly="true"
+                                                                        v-model="nilai.ttlNilai" />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -256,11 +262,11 @@ export default {
 
                     this.resetForm()
 
-                    this.$router.push({
-                        name: 'ShowUmumHistory', params: {
-                            id_karyawan: this.routeParams.id_karyawan, tipe: this.routeParams.tipe, month: this.newCurrent.getMonth() + 1, year: this.newCurrent.getFullYear()
-                        }
-                    })
+                    // this.$router.push({
+                    //     name: 'ShowUmumHistory', params: {
+                    //         id_karyawan: this.routeParams.id_karyawan, tipe: this.routeParams.tipe, month: this.newCurrent.getMonth() + 1, year: this.newCurrent.getFullYear()
+                    //     }
+                    // })
                 })
                 .catch((errors) => {
                     this.loading(false)

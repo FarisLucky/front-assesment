@@ -4,37 +4,7 @@
             :paginate-elements-by-height="1400" filename="myPDF" :pdf-quality="2" :manual-pagination="false" pdf-format="a4"
             pdf-orientation="landscape" pdf-content-width="800px">
             <section class="pdf-content">
-                <section class="report-info">
-                    <section class="image-container">
-                        <img class="user-image" src="https://i.imgur.com/wKblc.jpg" alt="User Image" ref="userImage" />
-                    </section>
-
-                    <section class="user-details">
-                        <h4 class="user-name">Mogul Khan Touch This</h4>
-
-                        <span class="detail-container">
-                            <span class="detail-label">Game:</span>
-                            Game No. 3
-                        </span>
-
-                        <span class="detail-container">
-                            <span class="detail-label">Date and Time</span>
-                            November 11, 2019 1:00 PM - 2:23 PM
-                        </span>
-
-                        <span class="detail-container">
-                            <span class="detail-label">Game Replay Link:</span>
-
-                            <a
-                                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>
-                        </span>
-                    </section>
-                </section>
-
-                <section class="chart-container" v-for="(val, key) in 10" :key="key">
-                    <h4 class="time">November 11, 2019 1:00 PM - 2:23 PM</h4>
-                    {{ series }}
-                </section>
+                Test
             </section>
         </Vue3Html2pdf>
     </div>

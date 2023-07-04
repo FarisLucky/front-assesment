@@ -195,7 +195,7 @@ ul li {
                                 <tr>
                                     <td>
                                         <div class="text-end">
-                                            <router-link :to="{ name: 'generatePdf' }" class="btn btn-sm btn-warning">
+                                            <router-link to="" class="btn btn-sm btn-warning">
                                                 Cetak Nilai
                                             </router-link>
                                         </div>
