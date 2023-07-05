@@ -153,6 +153,11 @@ const routes = [
                         name: 'PenilaianEdit',
                         component: () => import('@/views/penilaian/Form.vue'),
                     },
+                    {
+                        path: '/nilai/:id_penilaian/progress',
+                        name: 'PenilaianProgressEdit',
+                        component: () => import('@/views/penilaian/FormProgress.vue'),
+                    },
                 ],
             },
             {

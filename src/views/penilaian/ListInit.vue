@@ -1,5 +1,18 @@
+<style>
+.bg-refresh {
+    background-color: rgba(235, 237, 239, .6);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-bottom: .4rem;
+}
+</style>
 <template>
     <div>
+        <div class="text-end bg-refresh">
+            <CButton :color="info" @click.prevent="onRefresh">
+                <CIcon :content="cilSync" size="sm" />
+            </CButton>
+        </div>
         <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
             :columns="columns" :rows="rows" :select-options="{ enabled: true }" v-on:page-change="onPageChange"
             v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange"

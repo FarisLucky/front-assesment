@@ -28,7 +28,7 @@ ul li {
             <CCardHeader>
                 <div class="d-flex justify-content-between">
                     <span class="d-inline-block">
-                        Detail Nilai Karyawan <strong class="text-primary">{{ ($route.params.tipe).toUpperCase() }}</strong>
+                        Detail Nilai Karyawan <strong class="text-primary">{{ $route.params.tipe }}</strong>
                     </span>
                     <router-link :to="{ name: 'ListHistoryPenilaian' }" class="btn btn-sm btn-secondary">
                         <CIcon :content="cilArrowCircleLeft" size="sm" />
@@ -37,13 +37,6 @@ ul li {
                 </div>
             </CCardHeader>
             <CCardBody>
-                <div class="d-flex justify-content-end">
-                    <router-link
-                        :to="{ name: routeName, params: { id_karyawan: $route.params.id_karyawan, tipe: getTextLink, month: month, year: year } }"
-                        class="text-info">
-                        {{ getTextLink.toUpperCase() }}
-                    </router-link>
-                </div>
                 <CRow>
                     <CCol :md="12" class="mb-2">
                         <ul class="data-karyawan">
@@ -80,7 +73,8 @@ ul li {
                                                             <span class="d-inline-block" style="width: 80%;">{{
                                                                 sub_penilaian.sub_penilaian }}</span>
                                                             <div class="d-inline-block">
-                                                                <CFormInput type="number" size="sm" :disabled=true
+                                                                <CFormInput type="number" size="sm"
+                                                                    :disabled="tipe.check_penilai < 1"
                                                                     v-model="sub_penilaian.nilai" />
                                                             </div>
                                                         </li>
@@ -194,11 +188,14 @@ ul li {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="text-end">
-                                            <a :href="'http://localhost/simpeg/pdf-view/' + id"
-                                                class="btn btn-sm btn-warning" target="_blank">
+                                        <div class="d-flex justify-content-between">
+                                            <router-link to="" class="btn btn-sm btn-warning">
                                                 Cetak Nilai
-                                            </a>
+                                            </router-link>
+                                            <CButton type="submit" color="primary" @click.prevent="onUpdate">
+                                                <CIcon :content="cilSave" size="sm" />
+                                                Simpan
+                                            </CButton>
                                         </div>
                                     </td>
                                 </tr>
@@ -222,6 +219,7 @@ import { useSpinnerStore } from '@/store/spinner'
 import { useUnitStore } from '@/store/unit'
 import { CButton } from '@coreui/vue'
 import { useToastStore } from '@/store/toast'
+import { usePenilaianStore } from '@/store/penilaian'
 
 export default {
     components: {
@@ -241,7 +239,8 @@ export default {
             month: new Date().getUTCMonth() + 1,
             year: new Date().getUTCFullYear(),
             ttlNilai: 0,
-            id: 0,
+            sumNilai: 0,
+            avgNilai: 0,
         }
     },
     computed: {
@@ -262,7 +261,6 @@ export default {
     methods: {
         ...mapActions(useHistoryStore, [
             'show',
-            'store',
             'resetForm',
             'resetValidation',
             'getPenilaian',
@@ -284,17 +282,11 @@ export default {
         onShow() {
             this.loading(true)
 
-            this.show({
-                id_karyawan: this.$route.params.id_karyawan,
-                tipe: this.$route.params.tipe,
-                month: this.$route.params.month,
-                year: this.$route.params.year,
-            })
+            usePenilaianStore()
+                .showProgress(this.$route.params.id_penilaian)
                 .then((response) => {
                     console.log(response)
                     this.penilaian = response.data
-                    this.id = response.data.id
-                    // this.detail = this.penilaian.relationship.detail
                     this.loading(false)
                 })
                 .catch((errors) => {
@@ -308,6 +300,46 @@ export default {
                     this.loading(false)
 
                     this.$router.back()
+                })
+        },
+
+        onUpdate() {
+            // this.loading(true)
+
+            const formRequest = {
+                id_penilaian: this.$route.params.id_penilaian,
+                penilaian: this.penilaian,
+            }
+
+            usePenilaianStore()
+                .update(formRequest, formRequest.id_penilaian)
+                .then((response) => {
+
+                    console.log(response)
+
+                    // this.loading(false)
+
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-success',
+                        title: 'Tindakan Berhasil',
+                        msg: 'Nilai sudah terisi',
+                    })
+
+                    this.resetForm()
+                })
+                .catch((errors) => {
+                    // this.loading(false)
+                    console.log(errors)
+
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: errors.response.data.message,
+                    })
+
+                    this.resetValidation()
                 })
         },
     },

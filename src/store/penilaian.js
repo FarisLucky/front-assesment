@@ -46,9 +46,20 @@ export const usePenilaianStore = defineStore('penilaian', {
       return penilaian;
     },
 
-    async update(id) {
+    async showProgress(id_penilaian) {
 
-      const penilaian = await http.put(`${this.url}/${id}`, this.form).then(response => {
+      const penilaian = await http
+        .get(`${this.url}/${id_penilaian}/progress/`)
+        .catch(errors => {
+          return errors
+        })
+
+      return penilaian;
+    },
+
+    async update(request,id) {
+
+      const penilaian = await http.put(`${this.url}/${id}`, request).then(response => {
         return response.data
       })
 

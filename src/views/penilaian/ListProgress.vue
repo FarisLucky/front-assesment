@@ -1,5 +1,18 @@
+<style>
+.bg-refresh {
+    background-color: rgba(235, 237, 239, .6);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-bottom: .4rem;
+}
+</style>
 <template>
     <div>
+        <div class="text-end bg-refresh">
+            <CButton @click.prevent="onRefresh">
+                <CIcon :content="cilSync" size="sm" />
+            </CButton>
+        </div>
         <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
             :columns="columns" :rows="rows" :select-options="{ enabled: true }" v-on:page-change="onPageChange"
             v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange"
@@ -7,7 +20,7 @@
             <template #table-row="props">
                 <span v-if="props.column.field == 'action'">
                     <router-link
-                        :to="{ name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe, month: month, year: year } }"
+                        :to="{ name: 'PenilaianProgressEdit', params: { id_penilaian: props.row.relationship.penilaian_karyawan[0].id } }"
                         class="link-primary" style="margin-right: 2px;">
                         <CIcon :content="cilChevronDoubleRight" size="sm" />
                     </router-link>
