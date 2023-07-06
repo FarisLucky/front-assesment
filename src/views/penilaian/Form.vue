@@ -86,7 +86,7 @@
                                                     <div class="penilaian-catatan">
                                                         <CFormTextarea label="Catatan" rows="2"
                                                             text="Silahkan diisi apabila terdapat catatan"
-                                                            v-model="tipe.catatan">
+                                                            :disabled="tipe.check < 1" v-model="tipe.catatan">
                                                         </CFormTextarea>
                                                     </div>
                                                 </div>
@@ -251,6 +251,9 @@ export default {
 
             this.store(formRequest)
                 .then((response) => {
+
+                    console.log(response)
+
                     this.loading(false)
 
                     this.showToast({
@@ -262,11 +265,11 @@ export default {
 
                     this.resetForm()
 
-                    // this.$router.push({
-                    //     name: 'ShowUmumHistory', params: {
-                    //         id_karyawan: this.routeParams.id_karyawan, tipe: this.routeParams.tipe, month: this.newCurrent.getMonth() + 1, year: this.newCurrent.getFullYear()
-                    //     }
-                    // })
+                    this.$router.push({
+                        name: 'PenilaianProgressEdit', params: {
+                            id_penilaian: response.data.data.data.id
+                        }
+                    })
                 })
                 .catch((errors) => {
                     this.loading(false)

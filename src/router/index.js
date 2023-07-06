@@ -4,7 +4,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout'
 import { useAuthStore } from '@/store/auth'
 import { useToastStore } from '@/store/toast'
-import useTableStore from '@/store/table'
 
 const routes = [
     {

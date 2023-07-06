@@ -30,7 +30,7 @@ ul li {
                     <span class="d-inline-block">
                         Detail Nilai Karyawan <strong class="text-primary">{{ $route.params.tipe }}</strong>
                     </span>
-                    <router-link :to="{ name: 'ListHistoryPenilaian' }" class="btn btn-sm btn-secondary">
+                    <router-link :to="{ name: 'ListPenilaian' }" class="btn btn-sm btn-secondary">
                         <CIcon :content="cilArrowCircleLeft" size="sm" />
                         Kembali
                     </router-link>
@@ -304,7 +304,7 @@ export default {
         },
 
         onUpdate() {
-            // this.loading(true)
+            this.loading(true)
 
             const formRequest = {
                 id_penilaian: this.$route.params.id_penilaian,
@@ -315,9 +315,7 @@ export default {
                 .update(formRequest, formRequest.id_penilaian)
                 .then((response) => {
 
-                    console.log(response)
-
-                    // this.loading(false)
+                    this.loading(false)
 
                     this.showToast({
                         show: true,
@@ -326,11 +324,10 @@ export default {
                         msg: 'Nilai sudah terisi',
                     })
 
-                    this.resetForm()
+                    this.onShow();
                 })
                 .catch((errors) => {
-                    // this.loading(false)
-                    console.log(errors)
+                    this.loading(false)
 
                     this.showToast({
                         show: true,
