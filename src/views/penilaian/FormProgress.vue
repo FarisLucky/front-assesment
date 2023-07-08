@@ -38,6 +38,11 @@ ul li {
             </CCardHeader>
             <CCardBody>
                 <CRow>
+                    <CCol :md="12" class="text-end">
+                        <CButton color="light" @click.prevent="onRefresh">
+                            <CIcon :content="cilSync" size="sm" />
+                        </CButton>
+                    </CCol>
                     <CCol :md="12" class="mb-2">
                         <ul class="data-karyawan">
                             <li>
@@ -118,11 +123,19 @@ ul li {
                                                 <div class="penilaian-item">
                                                     <ul class="list-group">
                                                         <li class="list-group-item">
-                                                            <span class="d-inline-block" style="width: 80%;">TOTAL RATA RATA
+                                                            <span class="d-inline-block" style="width: 80%;">TOTAL
                                                                 NILAI</span>
                                                             <div class="d-inline-block">
                                                                 <CFormInput type="number" size="sm" :disabled=true
                                                                     :value="penilaian.ttl_nilai" />
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="d-inline-block" style="width: 80%;">TOTAL RATA RATA
+                                                                NILAI</span>
+                                                            <div class="d-inline-block">
+                                                                <CFormInput type="number" size="sm" :disabled=true
+                                                                    :value="penilaian.rata_nilai" />
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -131,7 +144,7 @@ ul li {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr v-if="$route.params.tipe == 'pk_umum'">
+                                <tr v-if="penilaian.tipe == 'pk_umum'">
                                     <td>
                                         <div class="panel-tipe">
                                             <div class="panel-body">
@@ -303,6 +316,10 @@ export default {
                 })
         },
 
+        onRefresh() {
+            this.onShow()
+        },
+
         onUpdate() {
             this.loading(true)
 
@@ -341,7 +358,7 @@ export default {
         },
     },
     beforeRouteEnter(to, from, next) {
-        next((vm) => vm.onShow())
+        next((vm) => vm.onRefresh())
     },
 }
 </script>

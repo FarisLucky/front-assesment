@@ -28,11 +28,31 @@
                                                         {{ (tipe).toUpperCase() }}
                                                     </strong>
                                                 </span>
+                                                <CButton color="light" @click.prevent="onRefresh">
+                                                    <CIcon :content="cilSync" size="sm" />
+                                                </CButton>
                                             </div>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td>
+                                            <ul class="data-karyawan">
+                                                <li>
+                                                    <span>Nama: <strong>{{ karyawan.nama
+                                                    }}</strong></span>
+                                                </li>
+                                                <li>
+                                                    <span>Jabatan: <strong>{{ karyawan.relationship?.jabatans.nama
+                                                    }}</strong></span>
+                                                </li>
+                                                <li>
+                                                    <span>Penilaian: <strong>{{ (tipe).toUpperCase() }}</strong></span>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
                                     <tr v-for="tipe in penilaians" :key="tipe.id">
                                         <td>
                                             <div class="panel-tipe">
@@ -155,6 +175,7 @@ import { useSpinnerStore } from '@/store/spinner'
 import { useUnitStore } from '@/store/unit'
 import { CButton } from '@coreui/vue'
 import { useAuthStore } from '@/store/auth'
+import { useKaryawansStore } from '@/store/karyawans'
 
 export default {
     components: {
@@ -170,6 +191,7 @@ export default {
             cilArrowCircleLeft,
             cilSync,
             penilaians: [],
+            karyawan: [],
             tipe: this.$route.params.tipe,
             level: '',
             nilai: {
@@ -181,7 +203,7 @@ export default {
         }
     },
     created() {
-        this.getPenilaians()
+        this.onRefresh()
         this.routeParams = this.$route.params
         this.newCurrent = new Date()
     },
@@ -237,6 +259,34 @@ export default {
                         msg: errors.response.data.message,
                     })
                 })
+        },
+
+        getKaryawan() {
+            let params = {
+                id_karyawan: this.$route.params.id_karyawan,
+            }
+            this.loading(true)
+            useKaryawansStore()
+                .show(params.id_karyawan)
+                .then((response) => {
+                    this.karyawan = response.data
+                    this.loading(false)
+                })
+                .catch((errors) => {
+                    console.log(errors)
+                    this.loading(false)
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: errors.response.data.message,
+                    })
+                })
+        },
+
+        onRefresh() {
+            this.getPenilaians()
+            this.getKaryawan()
         },
 
         onSubmit() {
