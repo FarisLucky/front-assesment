@@ -1,25 +1,16 @@
 <template>
-    <CModal
-        ref="modal"
-        :visible="modal"
-        @close="setModal(false)"
-        :size="size"
-        scrollable
-    >
+    <CModal ref="modal" :visible="modal" @close="setModal(false)" :size="size" scrollable>
         <CModalHeader>
             <CModalTitle>{{ title }}</CModalTitle>
         </CModalHeader>
         <CModalBody>
             <Error v-if="nError">
                 <strong>{{ nError.message }}</strong>
-                <div
-                    v-for="(error, idx) in nError.errors"
-                    :key="idx"
-                >
+                <div v-for="(error, idx) in nError.errors" :key="idx">
                     <span>{{ error[0] }}</span>
                 </div>
             </Error>
-            <component :is="component"></component>
+            <component :is="component" @fetchData="$emit('fetch')"></component>
         </CModalBody>
     </CModal>
 </template>

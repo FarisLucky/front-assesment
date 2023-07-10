@@ -202,9 +202,10 @@ ul li {
                                 <tr>
                                     <td>
                                         <div class="d-flex justify-content-between">
-                                            <router-link to="" class="btn btn-sm btn-warning">
-                                                Cetak Nilai
-                                            </router-link>
+                                            <a :href="'http://localhost/simpeg/pdf-view/' + id"
+                                                class="btn btn-sm btn-warning" target="_blank">
+                                                Cetak Nilai 1
+                                            </a>
                                             <CButton type="submit" color="primary" @click.prevent="onUpdate">
                                                 <CIcon :content="cilSave" size="sm" />
                                                 Simpan

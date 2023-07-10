@@ -8,8 +8,8 @@
 </style>
 <template>
     <div>
-        <div class="text-end bg-refresh">
-            <CButton :color="info" @click.prevent="onRefresh">
+        <div class="text-end bg-refresh p-2">
+            <CButton color="light" @click.prevent="onRefresh">
                 <CIcon :content="cilSync" size="sm" />
             </CButton>
         </div>

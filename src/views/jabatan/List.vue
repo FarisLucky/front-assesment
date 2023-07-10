@@ -1,64 +1,48 @@
 <template>
+    <Form @fetch="onRefresh" />
     <CCard class="mb-4">
         <CCardHeader>
             <div class="d-flex justify-content-between">
                 <span class="d-inline-block">
                     List Jabatan
                 </span>
+                <CButton color="light" @click.prevent="onRefresh">
+                    <CIcon :content="cilSync" size="sm" />
+                </CButton>
             </div>
         </CCardHeader>
         <CCardBody>
-            <vue-good-table
-                mode="remote"
-                :totalRows="totalRecords"
-                :pagination-options="paginations"
-                :isLoading="isLoading"
-                :columns="columns"
-                :rows="rows"
-                :select-options="{ enabled: true }"
-                v-on:page-change="onPageChange"
-                v-on:per-page-change="onPerPageChange"
-                v-on:column-filter="onColumnFilter"
-                v-on:sort-change="onSortChange"
-                v-on:select-all="onSelectAll"
-            >
+            <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
+                :columns="columns" :rows="rows" :select-options="{ enabled: true }" :sort-options="{
+                    initialSortBy: { field: 'updated_at', type: 'desc' }
+                }" v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
                 <template #table-row="props">
                     <span v-if="props.column.field == 'action'">
-                        <a
-                            href="javascript:"
-                            @click.prevent="onShow({id: props.row.id})"
-                        >
-                            <CIcon
-                                :content="cilPencil"
-                                size="sm"
-                            />
+                        <a href="javascript:" @click.prevent="onShow({ id: props.row.id })">
+                            <CIcon :content="cilPencil" size="sm" />
                         </a>
-                        <a
-                            href="javascript:"
-                            @click.prevent="
-                                        setModal(true);
-                                        setSize('sm');
-                                        setComponent('Delete');
-                                        setId(props.row.id);
-                                    "
-                            class="text-danger"
-                        >
-                            <CIcon
-                                :content="cilTrash"
-                                size="sm"
-                            />
+                        <a href="javascript:" @click.prevent="
+                            setModal(true);
+                        setSize('sm');
+                        setComponent('Delete');
+                        setId(props.row.id);
+                        " class="text-danger">
+                            <CIcon :content="cilTrash" size="sm" />
                         </a>
                     </span>
                 </template>
             </vue-good-table>
         </CCardBody>
     </CCard>
+    <Modal @fetch="onRefresh"></Modal>
 </template>
 <script>
-import { cilPencil, cilTrash, cilUserFollow } from '@coreui/icons'
+import Form from './Form.vue'
+import Modal from './Modal.vue'
+import { cilPencil, cilTrash, cilUserFollow, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
-import { useTableStore } from '@/store/table'
 import { useModalStore } from '@/store/modal'
 import { useJabatanStore } from '@/store/jabatan'
 import { useToastStore } from '@/store/toast'
@@ -67,19 +51,20 @@ import queryString from 'query-string'
 
 export default {
     components: {
-        VueGoodTable,
+        VueGoodTable, Modal, Form
     },
     data() {
         return {
             cilPencil,
             cilTrash,
             cilUserFollow,
+            cilSync,
             isLoading: true,
             serverParams: {
                 columnFilters: {},
                 sort: {
                     sort_by: '',
-                    sort_type: '',
+                    sort_type: 'desc',
                 },
                 page: 1,
                 perPage: 10,
@@ -102,14 +87,21 @@ export default {
             columns: [
                 {
                     label: 'Nama',
-                    field: 'nama_with_parent',
+                    field: 'nama',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
-                    label: 'Level',
-                    field: 'level',
+                    label: 'Atasan',
+                    field: 'relationship.parent.nama',
+                    filterOptions: {
+                        enabled: true,
+                    },
+                },
+                {
+                    label: 'Terakhir diubah',
+                    field: 'updated_at',
                     filterOptions: {
                         enabled: true,
                     },
@@ -117,6 +109,10 @@ export default {
                 {
                     label: 'Aksi',
                     field: 'action',
+                    filterOptions: {
+                        enabled: false,
+                    },
+                    sortable: false,
                 },
             ],
             rows: [],
@@ -172,6 +168,10 @@ export default {
                     this.resetValidation()
                     this.loading(false)
                 })
+        },
+
+        onRefresh() {
+            this.fetchData()
         },
 
         async fetchData() {
@@ -252,8 +252,8 @@ export default {
         onSortChange(params) {
             let sort = {
                 sort: {
-                    sort_by: params[0].field,
-                    sort_type: params[0].type,
+                    sort_by: params[0].field ?? null,
+                    sort_type: params[0].type == 'none' ? null : params[0].type,
                 },
             }
             this.updateParams(sort)

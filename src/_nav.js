@@ -25,11 +25,11 @@ export default [
         name: 'Jabatan',
         to: '/jabatans',
       },
-      {
-        component: 'CNavItem',
-        name: 'Unit',
-        to: '/units',
-      },
+    //   {
+    //     component: 'CNavItem',
+    //     name: 'Unit',
+    //     to: '/units',
+    //   },
       {
         component: 'CNavItem',
         name: 'Penilaians',

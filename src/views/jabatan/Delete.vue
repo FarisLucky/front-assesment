@@ -5,17 +5,9 @@
         </CCol>
         <CCol :md="12">
             <div class="mb-3 text-end">
-                <CButton
-                    type="button"
-                    color="danger"
-                    class="text-white"
-                    style="margin-right: 7px;"
-                    @click.prevent="onDestroy"
-                >
-                    <CIcon
-                        :content="cilSave"
-                        size="sm"
-                    />
+                <CButton type="button" color="danger" class="text-white" style="margin-right: 7px;"
+                    @click.prevent="onDestroy">
+                    <CIcon :content="cilSave" size="sm" />
                     Hapus
                 </CButton>
             </div>
@@ -56,7 +48,7 @@ export default {
                         title: 'Berhasil',
                         msg: 'Tindakan Berhasil !',
                     })
-                    useTableStore().fetchData()
+                    this.$emit('fetchData')
                 })
                 .catch((errors) => {
                     useToastStore().showToast({
