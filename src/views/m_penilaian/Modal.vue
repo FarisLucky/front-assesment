@@ -27,9 +27,6 @@ export default {
             'component',
         ]),
     },
-    mounted() {
-        this.$emit('fetch')
-    },
     methods: {
         ...mapActions(useModalStore, {
             setTitle: 'setTitle',

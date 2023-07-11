@@ -18,7 +18,6 @@
 import { cilSave, cilSync } from '@coreui/icons'
 import { mapActions, mapState } from 'pinia'
 import { useJabatanStore } from '@/store/jabatan'
-import { useTableStore } from '@/store/table'
 import { useToastStore } from '@/store/toast'
 import { useModalStore } from '@/store/modal'
 

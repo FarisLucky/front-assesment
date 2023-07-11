@@ -55,7 +55,6 @@ import { mapActions } from 'pinia'
 import { mapState } from 'pinia'
 import { useToastStore } from '@/store/toast'
 import { useSpinnerStore } from '@/store/spinner'
-import useTableStore from '@/store/table'
 
 export default {
     data() {
@@ -132,6 +131,7 @@ export default {
         onSubmit() {
 
             useSpinnerStore().loading(true)
+
             let action
 
             if (this.method == 'POST') {

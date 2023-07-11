@@ -103,7 +103,7 @@ export default {
                     label: 'Terakhir diubah',
                     field: 'updated_at',
                     filterOptions: {
-                        enabled: true,
+                        enabled: false,
                     },
                 },
                 {
@@ -124,8 +124,6 @@ export default {
     },
     created() {
         this.setUrl(this.url)
-
-        this.fetchData()
     },
     methods: {
         ...mapActions(useModalStore, [
@@ -157,6 +155,10 @@ export default {
                     this.loading(false)
                 })
                 .catch((errors) => {
+                    console.log(errors.toJSON())
+                    if (errors) {
+
+                    }
                     useToastStore().showToast({
                         show: true,
                         classType: 'bg-danger',

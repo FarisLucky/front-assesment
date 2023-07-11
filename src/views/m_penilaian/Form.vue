@@ -91,7 +91,6 @@ export default {
     },
     created() {
         this.resetForm()
-        this.getJabatans()
         this.getTipe()
     },
     methods: {

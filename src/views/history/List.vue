@@ -12,6 +12,7 @@
                 </div>
             </CCardHeader>
             <CCardBody>
+                <Filter @columnFilter="onColumnFilter" />
                 <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
                     :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
                     v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
@@ -31,6 +32,7 @@
     </div>
 </template>
 <script>
+import Filter from './Filter.vue'
 import {
     cilPen,
     cilTrash,
@@ -47,7 +49,7 @@ import queryString from 'query-string'
 
 export default {
     components: {
-        VueGoodTable,
+        VueGoodTable, Filter
     },
     data() {
         return {
@@ -225,6 +227,7 @@ export default {
         },
 
         onColumnFilter(params) {
+            console.log(params)
             let vKey = this.removeNullFilter(params.columnFilters, 'key')
             let vVal = this.removeNullFilter(params.columnFilters, 'val')
             let customParams = {
@@ -233,9 +236,13 @@ export default {
                     column_val: vVal,
                 },
             }
+            console.log(customParams)
             let filterLength =
                 Object.values(params.columnFilters)[0]?.length ?? 0
             if (filterLength >= 3 || filterLength == 0) {
+                this.updateParams(customParams)
+                this.fetchData()
+            } else if (filterLength >= 2 && params?.type == 'filterExt') {
                 this.updateParams(customParams)
                 this.fetchData()
             }

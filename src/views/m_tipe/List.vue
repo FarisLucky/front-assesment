@@ -36,7 +36,7 @@
                 </CCardBody>
             </CCard>
         </CCol>
-        <CCol md="3">
+        <CCol md="3" class="order-first order-md-last">
             <Form @fetch="onRefresh"></Form>
         </CCol>
     </CRow>

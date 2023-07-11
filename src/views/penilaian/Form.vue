@@ -40,11 +40,10 @@
                                         <td>
                                             <ul class="data-karyawan">
                                                 <li>
-                                                    <span>Nama: <strong>{{ karyawan.nama
-                                                    }}</strong></span>
+                                                    <span>Nama: <strong>{{ karyawan.nama }}</strong></span>
                                                 </li>
                                                 <li>
-                                                    <span>Jabatan: <strong>{{ karyawan.relationship?.jabatans.nama
+                                                    <span>Jabatan: <strong>{{ karyawan.relationship?.jabatan.nama
                                                     }}</strong></span>
                                                 </li>
                                                 <li>
@@ -238,7 +237,7 @@ export default {
 
         ...mapActions(useToastStore, ['showToast']),
 
-        getPenilaians() {
+        async getPenilaians() {
             let params = {
                 id_karyawan: this.$route.params.id_karyawan,
                 tipe: this.$route.params.tipe,
@@ -261,7 +260,7 @@ export default {
                 })
         },
 
-        getKaryawan() {
+        async getKaryawan() {
             let params = {
                 id_karyawan: this.$route.params.id_karyawan,
             }
@@ -269,7 +268,9 @@ export default {
             useKaryawansStore()
                 .show(params.id_karyawan)
                 .then((response) => {
+                    console.log(response.data)
                     this.karyawan = response.data
+                    console.log(this.karyawan.nama)
                     this.loading(false)
                 })
                 .catch((errors) => {

@@ -134,7 +134,7 @@ export default {
     created() {
         this.setUrl(this.url)
 
-        this.fetchData()
+        this.onRefresh()
     },
     methods: {
         ...mapActions(useModalStore, [
