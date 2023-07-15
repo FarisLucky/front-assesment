@@ -126,6 +126,18 @@ const routes = [
                 ],
             },
             {
+                path: '/m-valid-penilai',
+                name: 'MasterValidPenilai',
+                component: () => import('@/views/m_valid_penilai/Index.vue'),
+                children: [
+                    {
+                        path: '',
+                        name: 'ListSub',
+                        component: () => import('@/views/m_valid_penilai/List.vue'),
+                    },
+                ],
+            },
+            {
                 path: '/tipe',
                 name: 'MasterTipe',
                 component: () => import('@/views/m_tipe/Index.vue'),

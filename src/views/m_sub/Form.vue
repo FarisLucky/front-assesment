@@ -114,6 +114,7 @@ import { useMSubStore } from '@/store/m_sub'
 export default {
     components: {
         DatePicker,
+        Multiselect,
     },
     props: ['nama', 'addBtn'],
     data() {
@@ -149,7 +150,6 @@ export default {
     },
     mounted() {
         this.btnStatus = this.addBtn
-        console.log(this.addBtn)
     },
     watch: {
         'addBtn'(newVal) {

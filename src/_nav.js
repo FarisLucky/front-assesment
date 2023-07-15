@@ -42,6 +42,11 @@ export default [
       },
       {
         component: 'CNavItem',
+        name: 'Sub Item',
+        to: '/m-valid-penilai',
+      },
+      {
+        component: 'CNavItem',
         name: 'Tipe',
         to: '/tipe',
       },
