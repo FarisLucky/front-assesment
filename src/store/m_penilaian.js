@@ -6,7 +6,8 @@ export const useMPenilaianStore = defineStore('m_penilaian', {
     id: '',
     form: {
       nama: '',
-      id_tipe: ''
+      id_tipe: '',
+      bobot: ''
     },
     validate: '',
     url: '/penilaians',
@@ -60,9 +61,7 @@ export const useMPenilaianStore = defineStore('m_penilaian', {
     resetForm() {
       this.form.nama = ''
       this.form.id_tipe = ''
-      this.form.created_at = ''
-      this.form.updated_at = ''
-      this.form.deleted_at = ''
+      this.form.bobot = ''
     },
 
     resetValidation() {

@@ -158,6 +158,7 @@ export default {
                 .then((response) => {
                     this.form.nama = response.data.nama
                     this.form.id_tipe = response.data.id_tipe
+                    this.form.bobot = response.data.bobot
 
                     this.setId(response.data.id)
                     this.setMethod('PUT')

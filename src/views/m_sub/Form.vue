@@ -25,7 +25,8 @@
                     <CCol :md="3" v-for="(sub, idx) in subsNama" :key="sub.iterate">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput id="nama" type="text" v-model="sub.nama" />
+                            <CFormInput id="nama" type="text" v-model="sub.nama" @keyup.ctrl.tab="onTab"
+                                @keyup.ctrl.delete="onTabRemove" />
                         </div>
                     </CCol>
                     <CCol :md="12">
@@ -60,6 +61,16 @@
                                     </v-select>
                                     <div class="invalid-feedback d-inline-block" v-if="validate?.id_jabatan_kinerja">
                                         {{ validate?.id_jabatan_kinerja[0] }}
+                                    </div>
+                                </div>
+                            </CCol>
+                            <CCol :md="3">
+                                <div class="mb-1">
+                                    <CFormLabel for="penilai">Kategori</CFormLabel>
+                                    <v-select v-model="form.kategori" :options="kategories" :reduce="kat => kat.id">
+                                    </v-select>
+                                    <div class="invalid-feedback d-inline-block" v-if="validate?.kategori">
+                                        {{ validate?.kategori[0] }}
                                     </div>
                                 </div>
                             </CCol>
@@ -123,6 +134,16 @@ export default {
             jabatanPenilaiList: [],
             jabatanKinerjaList: [],
             unitKinerjaList: [],
+            kategories: [
+                {
+                    id: 0,
+                    label: 'NON MEDIS',
+                },
+                {
+                    id: 1,
+                    label: 'MEDIS',
+                },
+            ],
             btnStatus: true
         }
     },
@@ -131,9 +152,6 @@ export default {
         console.log(this.addBtn)
     },
     watch: {
-        'form.nama'(newVal) {
-            this.subsNama = newVal
-        },
         'addBtn'(newVal) {
             this.btnStatus = newVal
         }
@@ -170,6 +188,16 @@ export default {
             })
         },
 
+        onTab() {
+            this.addNamaField()
+        },
+
+        onTabRemove() {
+            if (this.subsNama.length > 1) {
+                this.subsNama.pop()
+            }
+        },
+
         removeNamaField() {
             if (this.iterate > 1) {
                 this.subsNama.pop()
@@ -183,7 +211,7 @@ export default {
                 .then((response) => {
                     let data = response.data.data.map((val) => ({
                         id: val.id,
-                        label: `${val.tipe.toUpperCase()} - ${val.nama} `,
+                        label: `${val.nama} - ${val.tipe}`,
                     }))
                     this.jenisPenilaianList = data
                 })
@@ -269,11 +297,19 @@ export default {
             this.onRefresh()
             this.resetForm()
             this.resetValidation()
+            this.subsNama = [
+                {
+                    nama: '',
+                    iterate: 1,
+                },
+            ]
             this.$emit('resetBtn')
         },
 
         onRefresh() {
             this.$emit('fetch')
+            this.getJenisPenilaianList()
+            this.getJabatanList()
         },
     },
 }

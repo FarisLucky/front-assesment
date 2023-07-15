@@ -6,7 +6,6 @@
         <CModalBody>
             <component @fetchData="onFetch()" :is="component"></component>
         </CModalBody>
-        <button @click="onFetch()">fetch modla</button>
     </CModal>
 </template>
 <script>

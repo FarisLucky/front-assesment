@@ -16,7 +16,7 @@
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
                             <CFormInput id="nama" type="text" v-model="form.nama" />
-                            <div class="invalid-feedback d-inline-block" v-if="validate?.nama">
+                            <div class=" invalid-feedback d-inline-block" v-if="validate?.nama">
                                 {{ validate?.nama[0] }}
                             </div>
                         </div>
@@ -28,6 +28,15 @@
                             </v-select>
                             <div class="invalid-feedback d-inline-block" v-if="validate?.id_tipe">
                                 {{ validate?.id_tipe[0] }}
+                            </div>
+                        </div>
+                    </CCol>
+                    <CCol :md="1">
+                        <div class="mb-1">
+                            <CFormLabel for="nama">Bobot</CFormLabel>
+                            <CFormInput id="nama" type="number" v-model="form.bobot" />
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.bobot">
+                                {{ validate?.bobot[0] }}
                             </div>
                         </div>
                     </CCol>
@@ -88,6 +97,9 @@ export default {
         'form.nama'() {
             this.form.nama = this.form.nama.toUpperCase()
         },
+        'form.bobot'(newVal) {
+            this.form.bobot = newVal.length > 3 ? '' : newVal
+        }
     },
     created() {
         this.resetForm()
@@ -134,7 +146,7 @@ export default {
                     console.log(response)
                     let prepareData = response.data.data.map((val) => ({
                         id: val.id,
-                        label: val.nama + ' / ' + val.tipe,
+                        label: val.tipe + ' / ' + val.nama,
                     }))
                     this.tipePenilaianList = prepareData
                 })
@@ -193,6 +205,7 @@ export default {
 
         onReset() {
             this.$emit('fetch') // reload data in table
+            this.getTipe()
             this.resetForm()
             this.resetValidation()
         },

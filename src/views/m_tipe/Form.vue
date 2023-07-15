@@ -99,6 +99,9 @@ export default {
     watch: {
         'form.nama'(newVal) {
             this.form.nama = newVal.toUpperCase()
+        },
+        'form.tipe'(newVal) {
+            this.form.tipe = newVal.toUpperCase()
         }
     },
     methods: {
