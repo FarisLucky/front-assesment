@@ -5,7 +5,7 @@
             <CCardHeader>
                 <div class="d-flex justify-content-between">
                     <span class="d-inline-block">
-                        Master Sub Penilaian
+                        Master Validasi Penilaian Khusus
                     </span>
                     <CButton color="light" @click.prevent="onRefresh">
                         <CIcon :content="cilSync" size="sm" />
@@ -45,7 +45,7 @@ import Form from './Form.vue'
 import { cilPencil, cilTrash, cilUserFollow, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
-import { useMSubStore } from '@/store/m_sub'
+import { useMValidasiStore } from '@/store/m_validasi'
 import { useModalStore } from '@/store/modal'
 import { useToastStore } from '@/store/toast'
 import { useSpinnerStore } from '@/store/spinner'
@@ -97,39 +97,19 @@ export default {
                     sortable: false,
                 },
                 {
-                    label: 'Nama',
-                    field: 'nama',
+                    label: 'Sub Penilaian',
+                    field: 'relationship.m_sub_penilaian.nama',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
-                    label: 'Penilaian',
-                    field: 'penilaian_nama',
+                    label: 'Jabatan Penilai',
+                    field: 'relationship.jabatan_penilai.nama',
                     filterOptions: {
-                        enabled: true,
+                        enabled: false,
                     },
-                },
-                {
-                    label: 'Tipe',
-                    field: 'penilaian_tipe',
-                    filterOptions: {
-                        enabled: true,
-                    },
-                },
-                {
-                    label: 'Penilai',
-                    field: 'jabatan_penilai_nama',
-                    filterOptions: {
-                        enabled: true,
-                    },
-                },
-                {
-                    label: 'Kinerja',
-                    field: 'jabatan_kinerja_nama',
-                    filterOptions: {
-                        enabled: true,
-                    },
+                    sortable: false,
                 },
                 {
                     label: 'Aksi',
@@ -144,7 +124,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(useMSubStore, ['form', 'url']),
+        ...mapState(useMValidasiStore, ['form', 'url']),
     },
     created() {
         this.setUrl(this.url)
@@ -160,7 +140,7 @@ export default {
             'setComponent',
         ]),
 
-        ...mapActions(useMSubStore, ['setId', 'show', 'setMethod']),
+        ...mapActions(useMValidasiStore, ['setId', 'show', 'setMethod']),
 
         ...mapActions(useSpinnerStore, ['loading']),
 

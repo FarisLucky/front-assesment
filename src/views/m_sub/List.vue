@@ -118,18 +118,12 @@ export default {
                     },
                 },
                 {
-                    label: 'Penilai',
-                    field: 'jabatan_penilai_nama',
+                    label: 'Kategori',
+                    field: 'kategori_desc',
                     filterOptions: {
                         enabled: true,
                     },
-                },
-                {
-                    label: 'Kinerja',
-                    field: 'jabatan_kinerja_nama',
-                    filterOptions: {
-                        enabled: true,
-                    },
+                    sortable: false,
                 },
                 {
                     label: 'Aksi',

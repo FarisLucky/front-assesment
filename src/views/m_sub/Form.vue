@@ -44,28 +44,6 @@
                             </CCol>
                             <CCol :md="3">
                                 <div class="mb-1">
-                                    <CFormLabel for="penilai">Jabatan Penilai</CFormLabel>
-                                    <v-select v-model="form.id_jabatan_penilai" :options="jabatanPenilaiList"
-                                        :reduce="jpl => jpl.id">
-                                    </v-select>
-                                    <div class="invalid-feedback d-inline-block" v-if="validate?.id_jabatan_penilai">
-                                        {{ validate?.id_jabatan_penilai[0] }}
-                                    </div>
-                                </div>
-                            </CCol>
-                            <CCol :md="3">
-                                <div class="mb-1">
-                                    <CFormLabel for="penilai">Penilaian Kinerja</CFormLabel>
-                                    <v-select v-model="form.id_jabatan_kinerja" :options="jabatanKinerjaList"
-                                        :reduce="jkl => jkl.id">
-                                    </v-select>
-                                    <div class="invalid-feedback d-inline-block" v-if="validate?.id_jabatan_kinerja">
-                                        {{ validate?.id_jabatan_kinerja[0] }}
-                                    </div>
-                                </div>
-                            </CCol>
-                            <CCol :md="3">
-                                <div class="mb-1">
                                     <CFormLabel for="penilai">Kategori</CFormLabel>
                                     <v-select v-model="form.kategori" :options="kategories" :reduce="kat => kat.id">
                                     </v-select>
@@ -114,7 +92,6 @@ import { useMSubStore } from '@/store/m_sub'
 export default {
     components: {
         DatePicker,
-        Multiselect,
     },
     props: ['nama', 'addBtn'],
     data() {

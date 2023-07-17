@@ -28,6 +28,11 @@ export const useMSubStore = defineStore('m_sub', {
 
             return jabatans
         },
+        async fetchDataKhusus() {
+            const jabatans = await http.get(`${this.url}/khusus/data`)
+
+            return jabatans
+        },
 
         async store(request) {
 

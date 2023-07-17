@@ -3,7 +3,7 @@
         <CCardHeader>
             <div class="d-flex justify-content-between">
                 <span class="d-inline-block">
-                    Tambah Sub Penilaian
+                    Tambah Validasi Penilaian Khusus
                 </span>
             </div>
         </CCardHeader>
@@ -12,25 +12,21 @@
                 <input type="hidden" name="__method" v-model="method" />
                 <input type="hidden" name="id" v-if="method == 'PUT'" v-model="id" />
                 <CRow class="align-items-end">
-                    <CCol :md="6">
+                    <CCol :md="12">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <VueMultiselect v-model="selected" :options="subPenilains" label="name" track-by="name">
+                            <VueMultiselect v-model="form.sub_penilaians" :options="subPenilains" label="nama" track-by="id"
+                                :multiple="true">
                             </VueMultiselect>
                         </div>
                     </CCol>
                     <CCol :md="3">
                         <div class="mb-1">
                             <CFormLabel for="penilai">Jabatan Penilai</CFormLabel>
-                            <v-select v-model="form.id_jabatan_penilai" :options="subPenilains" :reduce="jpl => jpl.id"
-                                :disabled="true">
-                            </v-select>
-                            <div class="invalid-feedback d-inline-block" v-if="validate?.id_jabatan_penilai">
-                                {{ validate?.id_jabatan_penilai[0] }}
-                            </div>
+                            <CFormInput type="text" :value="idJabatanPenilai.karyawan.jabatan.nama" :disabled="true" />
                         </div>
                     </CCol>
-                    <CCol :md="12">
+                    <CCol>
                         <div class="mb-1 text-start">
                             <CButton type="submit" color="primary" class="mt-1" style="margin-right: 7px;">
                                 <CIcon :content="cilSave" size="sm" />
@@ -63,21 +59,26 @@ import 'vue-datepicker-next/index.css'
 import { useSpinnerStore } from '@/store/spinner'
 import { useMSubStore } from '@/store/m_sub'
 import VueMultiselect from 'vue-multiselect'
+import { useAuthStore } from '@/store/auth'
+import { useMValidasiStore } from '@/store/m_validasi'
 
 export default {
     components: {
         DatePicker,
         VueMultiselect,
     },
-    props: ['nama', 'addBtn'],
     data() {
+
+        const idJabatanPenilai = useAuthStore().user
+
         return {
             cilSave,
             cilSync,
             cilArrowCircleLeft,
             cilMedicalCross,
             cilX,
-            subPenilains: []
+            idJabatanPenilai,
+            subPenilains: [],
         }
     },
     mounted() {
@@ -92,10 +93,10 @@ export default {
         this.getSubPenilaians()
     },
     computed: {
-        ...mapState(useMSubStore, ['id', 'form', 'validate', 'method']),
+        ...mapState(useMValidasiStore, ['id', 'form', 'validate', 'method']),
     },
     methods: {
-        ...mapActions(useMSubStore, [
+        ...mapActions(useMValidasiStore, [
             'store',
             'update',
             'setMethod',
@@ -110,11 +111,11 @@ export default {
 
         getSubPenilaians() {
             useMSubStore()
-                .fetchData()
+                .fetchDataKhusus()
                 .then((response) => {
                     let data = response.data.data.map((val) => ({
                         id: val.id,
-                        name: `${val.nama} - ${val.relationship[0]?.penilaian.nama}`,
+                        nama: `${val.nama} ( ${val.relationship?.penilaian.nama} )`,
                     }))
                     this.subPenilains = data
                 })
@@ -132,8 +133,6 @@ export default {
             this.loading(true)
 
             let action
-
-            this.form.nama = this.subsNama
 
             if (this.method == 'POST') {
                 action = this.store(this.form)
@@ -168,8 +167,8 @@ export default {
                             msg: errors?.response.data.message,
                         })
 
-                        this.resetForm()
-                        this.resetValidation()
+                        // this.resetForm()
+                        // this.resetValidation()
                     }
                 })
         },
@@ -190,7 +189,9 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style>
 .multiselect,
-.multiselect__tags {
+.multiselect__tags,
+.multiselect__input,
+.multiselect__single {
     font-size: 12px !important;
 }
 </style>

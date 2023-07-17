@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const url = "http://192.168.3.52/simpeg/api"; //WEB APACHE
-// const url = "http://localhost/simpeg/api"; //WEB APACHE
+// const url = "http://192.168.3.52/simpeg/api"; //WEB APACHE
+const url = "http://localhost/simpeg/api"; //WEB APACHE
 // const baseUrl = "http://localhost:8000/api"; // PHP LIVE SERVER
 
 const token = Cookies.get('user') != undefined ? JSON.parse(Cookies.get('user')).token : ''
