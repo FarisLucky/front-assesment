@@ -16,18 +16,14 @@
         <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
             :columns="columns" :rows="rows" :select-options="{ enabled: true }" v-on:page-change="onPageChange"
             v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange"
-            v-on:select-all="onSelectAll">
+            v-on:select-all="onSelectAll" theme="polar-bear">
             <template #table-row="props">
                 <span v-if="props.column.field == 'action'">
-                    <router-link
-                        v-if="props.row.relationship.pk_umum?.length < 1 || props.row.relationship.pk_umum[0].status == 'draft'"
-                        :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.umum } }"
+                    <router-link :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.umum } }"
                         class="link-primary" style="margin-right: 2px;">
                         <CIcon :content="cilPen" size="sm" />
                     </router-link>
-                    <router-link
-                        v-if="props.row.relationship.pk_khusus?.length < 1 || props.row.relationship.pk_khusus[0]?.status == 'draft'"
-                        :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.khusus } }"
+                    <router-link :to="{ name: 'PenilaianEdit', params: { id_karyawan: props.row.id, tipe: tipe.khusus } }"
                         class="link-info">
                         <CIcon :content="cilPenAlt" size="sm" />
                     </router-link>

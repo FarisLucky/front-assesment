@@ -165,7 +165,7 @@ const routes = [
                         component: () => import('@/views/penilaian/Form.vue'),
                     },
                     {
-                        path: '/nilai/:id_penilaian/progress',
+                        path: '/nilai/:id_penilaian/progress/',
                         name: 'PenilaianProgressEdit',
                         component: () => import('@/views/penilaian/FormProgress.vue'),
                     },
@@ -182,12 +182,12 @@ const routes = [
                         component: () => import('@/views/history/List.vue'),
                     },
                     {
-                        path: '/:id_karyawan/:tipe/:month/:year',
+                        path: '/:id_karyawan/:tipe',
                         name: 'ShowUmumHistory',
                         component: () => import('@/views/history/Form.vue'),
                     },
                     {
-                        path: '/:id_karyawan/:tipe/:month/:year',
+                        path: '/:id_karyawan/:tipe',
                         name: 'ShowKhususHistory',
                         component: () => import('@/views/history/Form.vue'),
                     },

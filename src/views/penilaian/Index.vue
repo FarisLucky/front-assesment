@@ -11,9 +11,6 @@
     </div>
 </template>
 <script>
-import ProgressTab from './ProgressTab.vue'
 export default {
-    components: { ProgressTab }
-
 }
 </script>

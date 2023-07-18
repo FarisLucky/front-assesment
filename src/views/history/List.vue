@@ -20,7 +20,7 @@
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
                             <router-link
-                                :to="{ name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe, month: month, year: year } }"
+                                :to="{ name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe } }"
                                 class="link-primary" style="margin-right: 2px;">
                                 <CIcon :content="cilChevronDoubleRight" size="sm" />
                             </router-link>

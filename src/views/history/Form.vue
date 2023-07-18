@@ -1,27 +1,4 @@
-<style scoped>
-ul {
-    list-style-type: none;
-    padding-left: 0.4rem;
-    margin-bottom: 0;
-}
 
-ul li {
-    padding-bottom: 0.3rem;
-}
-
-.txt_nilai {
-    font-weight: 700;
-}
-
-.ttl-catatan {
-    font-weight: 700;
-    font-size: 13px;
-}
-
-.ttl-color {
-    background: #eff8ff;
-}
-</style>
 <template>
     <div id="penilaian-form">
         <CCard>
@@ -30,23 +7,38 @@ ul li {
                     <span class="d-inline-block">
                         Detail Nilai Karyawan <strong class="text-primary">{{ ($route.params.tipe).toUpperCase() }}</strong>
                     </span>
-                    <router-link :to="{ name: 'ListHistoryPenilaian' }" class="btn btn-sm btn-secondary">
+                    <router-link :to="{ name: 'ListHistoryPenilaian' }" class="btn btn-sm btn-outline-secondary">
                         <CIcon :content="cilArrowCircleLeft" size="sm" />
                         Kembali
                     </router-link>
                 </div>
             </CCardHeader>
             <CCardBody>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex flex-column text-end">
                     <router-link
                         :to="{ name: routeName, params: { id_karyawan: $route.params.id_karyawan, tipe: getTextLink, month: month, year: year } }"
-                        class="text-info">
+                        class="text-primary mb-1">
                         {{ getTextLink.toUpperCase() }}
                     </router-link>
+                    <div>
+                        <CButton color="light" @click.prevent="onRefresh">
+                            <CIcon :content="cilSync" size="sm" />
+                        </CButton>
+                    </div>
                 </div>
-                <CRow>
+                <CRow class="layout">
+                    <CCol :md="6">
+                        <div style="padding-left: 0.5rem;">
+                            <p class="mb-1">Pilih Nilai</p>
+                            <v-select v-model="nilai" :options="penilaians" @option:selected="setNilaiSelected"
+                                label="label" :reduce="m => m.id" placeholder="Pilih Penilaian" />
+                        </div>
+                    </CCol>
                     <CCol :md="12" class="mb-2">
-                        <ul class="data-karyawan">
+                        <ul class="data-karyawan bg-data my-2">
+                            <li>
+                                <h4 style="font-size: 13px; font-weight: 700">Data Karyawan</h4>
+                            </li>
                             <li>
                                 <span>Nama: <strong>{{ penilaian.nama_karyawan }}</strong></span>
                             </li>
@@ -232,6 +224,60 @@ export default {
         params: Object,
     },
     data() {
+
+        const years = Array.from(Array(new Date().getFullYear() - 1949), (_, i) => (i + 1950).toString()).reverse()
+
+        const months = [
+            {
+                id: 1,
+                name: "Januari"
+            },
+            {
+                id: 2,
+                name: "Februari"
+            },
+            {
+                id: 3,
+                name: "Maret"
+            },
+            {
+                id: 4,
+                name: "April"
+            },
+            {
+                id: 5,
+                name: "Mei"
+            },
+            {
+                id: 6,
+                name: "Juni"
+            },
+            {
+                id: 7,
+                name: "Juli"
+            },
+            {
+                id: 8,
+                name: "Augustus"
+            },
+            {
+                id: 9,
+                name: "September"
+            },
+            {
+                id: 10,
+                name: "Oktober"
+            },
+            {
+                id: 11,
+                name: "November"
+            },
+            {
+                id: 12,
+                name: "Desember"
+            }
+        ]
+
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -242,6 +288,8 @@ export default {
             year: new Date().getUTCFullYear(),
             ttlNilai: 0,
             id: 0,
+            penilaians: [],
+            nilai: ''
         }
     },
     computed: {
@@ -259,13 +307,19 @@ export default {
                 : 'ShowKhususHistory'
         },
     },
+    created() {
+        this.listPenilaians()
+        this.onShow()
+    },
     methods: {
         ...mapActions(useHistoryStore, [
             'show',
+            'showById',
             'store',
             'resetForm',
             'resetValidation',
             'getPenilaian',
+            'getPenilaiansKaryawan',
             'setIdKaryawan',
         ]),
 
@@ -282,23 +336,18 @@ export default {
         ...mapActions(useToastStore, ['showToast']),
 
         onShow() {
-            this.loading(true)
-
             this.show({
                 id_karyawan: this.$route.params.id_karyawan,
                 tipe: this.$route.params.tipe,
-                month: this.$route.params.month,
-                year: this.$route.params.year,
             })
                 .then((response) => {
-                    console.log(response)
                     this.penilaian = response.data
                     this.id = response.data.id
+                    this.nilai = response.data.id
                     // this.detail = this.penilaian.relationship.detail
                     this.loading(false)
                 })
                 .catch((errors) => {
-                    console.log(errors)
                     this.showToast({
                         show: true,
                         classType: 'bg-danger',
@@ -310,9 +359,63 @@ export default {
                     this.$router.back()
                 })
         },
-    },
-    beforeRouteEnter(to, from, next) {
-        next((vm) => vm.onShow())
+
+        onShowById(id) {
+            this.loading(true)
+
+            this.showById(id)
+                .then((response) => {
+                    this.penilaian = response.data
+                    this.id = response.data.id
+                    this.loading(false)
+                })
+                .catch((errors) => {
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: 'Tidak ada data',
+                    })
+                    this.loading(false)
+
+                    this.$router.back()
+                })
+        },
+
+        listPenilaians() {
+            let params = {
+                id_karyawan: this.$route.params.id_karyawan,
+                tipe: this.$route.params.tipe,
+            }
+            this.getPenilaiansKaryawan(params)
+                .then(response => {
+                    this.penilaians = response.data.map(item => ({
+                        id: item.id,
+                        label: `${item.tipe} - ${item.tgl_nilai} - Penilai: ${item.nama_penilai}`
+                    }))
+                    this.loading(false)
+
+                })
+                .catch((errors) => {
+                    this.loading(false)
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: 'Tidak ada data',
+                    })
+                })
+        },
+
+        setNilaiSelected(params) {
+            this.nilai = params.id
+            this.onShowById(this.nilai)
+        },
+
+        onRefresh() {
+            this.onShow()
+            this.listPenilaians()
+        },
     },
 }
 </script>
@@ -332,7 +435,7 @@ export default {
 }
 
 .penilaian-nama {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     margin: 0.3rem 0;
 }
@@ -372,13 +475,37 @@ export default {
 }
 
 .data-karyawan li span {
-    font-size: 13px;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(148, 148, 148, 0.8);
+    font-size: 12px;
+}
+
+.bg-data {
+    background-color: rgba(170, 196, 255, .4);
+    border-radius: .2rem;
+    padding: .4rem .3rem;
+    margin: 0 .5rem;
 }
 
 .txt-penilai {
     margin-top: 4rem;
     display: inline-block;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin-bottom: 0;
+}
+
+.txt_nilai {
+    font-weight: 700;
+}
+
+.ttl-catatan {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.ttl-color {
+    background: #eff8ff;
 }
 </style>

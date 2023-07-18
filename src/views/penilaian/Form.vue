@@ -52,6 +52,21 @@
                                             </ul>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="mb-1">Pilih Waktu</p>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <v-select v-model="field.month" :options="months" label="name"
+                                                        :reduce="m => m.id" placeholder="Pilih Bulan" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <v-select v-model="field.year" :options="years" label="name"
+                                                        :reduce="m => m.id" placeholder="Pilih Tahun" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr v-for="tipe in penilaians" :key="tipe.id">
                                         <td>
                                             <div class="panel-tipe">
@@ -76,8 +91,7 @@
                                                                     <div class="d-inline-block">
                                                                         <CFormInput type="number" size="sm"
                                                                             v-model="sub_penilaian.nilai"
-                                                                            :ttlNilai="ttlNilai" :value="0"
-                                                                            :disabled="tipe.check < 1"
+                                                                            :ttlNilai="ttlNilai" :disabled="tipe.check < 1"
                                                                             :countNilai="nilai.countNilai = ++idx" />
                                                                     </div>
                                                                 </li>
@@ -185,6 +199,69 @@ export default {
         params: Object,
     },
     data() {
+        const years = Array.from(Array(new Date().getFullYear() - 1949), (_, i) => (i + 1950).toString()).reverse()
+
+        const months = [
+            {
+                id: 1,
+                name: "Januari"
+            },
+            {
+                id: 2,
+                name: "Februari"
+            },
+            {
+                id: 3,
+                name: "Maret"
+            },
+            {
+                id: 4,
+                name: "April"
+            },
+            {
+                id: 5,
+                name: "Mei"
+            },
+            {
+                id: 6,
+                name: "Juni"
+            },
+            {
+                id: 7,
+                name: "Juli"
+            },
+            {
+                id: 8,
+                name: "Augustus"
+            },
+            {
+                id: 9,
+                name: "September"
+            },
+            {
+                id: 10,
+                name: "Oktober"
+            },
+            {
+                id: 11,
+                name: "November"
+            },
+            {
+                id: 12,
+                name: "Desember"
+            }
+        ]
+
+        const field = {
+            month: '',
+            year: '',
+        }
+
+        const nilai = {
+            ttlNilai: 0,
+            countNilai: 0,
+        }
+
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -193,12 +270,12 @@ export default {
             karyawan: [],
             tipe: this.$route.params.tipe,
             level: '',
-            nilai: {
-                ttlNilai: 0,
-                countNilai: 0,
-            },
             routeParams: '',
-            currentTime: ''
+            currentTime: '',
+            nilai,
+            months,
+            years,
+            field
         }
     },
     created() {
@@ -213,7 +290,7 @@ export default {
 
         getLevel() {
             this.level = this.user.karyawan
-        },
+        }
     },
     methods: {
         ...mapActions(usePenilaianStore, [
@@ -298,6 +375,8 @@ export default {
                 penilaians: this.penilaians,
                 tipe: this.$route.params.tipe,
                 analisis_swot: this.form,
+                bulan_nilai: this.field.month,
+                tahun_nilai: this.field.year,
             }
 
             this.store(formRequest)
@@ -336,6 +415,7 @@ export default {
                     this.resetValidation()
                 })
         },
+
         linkPenilaian(link) {
             return {
                 name: 'PenilaianEdit',

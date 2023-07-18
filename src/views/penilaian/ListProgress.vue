@@ -5,6 +5,13 @@
     border-top-right-radius: 5px;
     margin-bottom: .4rem;
 }
+
+.tipe {
+    background-color: rgba(11, 102, 106, .7);
+    color: white;
+    padding: .2rem .3rem;
+    border-radius: 3px;
+}
 </style>
 <template>
     <div>
@@ -18,9 +25,11 @@
             v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange"
             v-on:select-all="onSelectAll">
             <template #table-row="props">
+                <span v-if="props.column.field == 'tipe' && props.row.tipe == 'pk_umum'">
+                    <span class="tipe">{{ props.row.tipe }}</span>
+                </span>
                 <span v-if="props.column.field == 'action'">
-                    <router-link
-                        :to="{ name: 'PenilaianProgressEdit', params: { id_penilaian: props.row.relationship.penilaian_karyawan[0].id } }"
+                    <router-link :to="{ name: 'PenilaianProgressEdit', params: { id_penilaian: props.row.id } }"
                         class="link-primary" style="margin-right: 2px;">
                         <CIcon :content="cilChevronDoubleRight" size="sm" />
                     </router-link>
@@ -55,7 +64,6 @@ export default {
             cilUserFollow,
             cilChevronDoubleRight,
             cilSync,
-            tipe: 'pk_umum',
             month: new Date().getUTCMonth() + 1,
             year: new Date().getUTCFullYear(),
             isLoading: true,
@@ -91,41 +99,41 @@ export default {
                 },
                 {
                     label: 'Nama',
-                    field: 'nama',
+                    field: 'relationship.karyawan.nama',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
                     label: 'Nip',
-                    field: 'nip',
+                    field: 'relationship.karyawan.nip',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
                     label: 'Sex',
-                    field: 'sex',
+                    field: 'relationship.karyawan.sex',
                     sortable: false,
                 },
                 {
                     label: 'Tgl Lahir',
-                    field: 'tgl_lahir',
+                    field: 'relationship.karyawan.tgl_lahir',
                     filterOptions: {
                         enabled: true,
                     },
                 },
                 {
-                    label: 'Alamat',
-                    field: 'alamat',
+                    label: 'Jabatan',
+                    field: 'jabatan',
                     filterOptions: {
                         enabled: true,
                     },
                     sortable: false,
                 },
                 {
-                    label: 'Jabatan',
-                    field: 'relationship.jabatans.nama',
+                    label: 'Tipe',
+                    field: 'tipe',
                     filterOptions: {
                         enabled: true,
                     },

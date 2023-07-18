@@ -1,4 +1,3 @@
-
 import { defineStore } from "pinia"
 import { http } from "@/config"
 
@@ -22,6 +21,14 @@ export const useHistoryStore = defineStore('historyPenilaian', {
       return nilai;
     },
 
+    async getPenilaiansKaryawan(params) {
+    const {id_karyawan, tipe} = params
+
+      const nilai = await http.get(`${this.url}/karyawan/${id_karyawan}/${tipe}`)
+
+      return nilai;
+    },
+
     async store(formRequest) {
 
       const penilaian = await http.post(this.url, formRequest)
@@ -32,6 +39,13 @@ export const useHistoryStore = defineStore('historyPenilaian', {
     async show(params) {
 
       const penilaian = await http.get(`${this.url}/${params.id_karyawan}/${params.tipe}/${params.month}/${params.year}`)
+
+      return penilaian;
+    },
+
+    async showById(id) {
+
+      const penilaian = await http.get(`${this.url}/by-id/${id}`)
 
       return penilaian;
     },
@@ -51,40 +65,5 @@ export const useHistoryStore = defineStore('historyPenilaian', {
 
       return penilaian
     },
-
-    resetForm() {
-      this.form.id_karyawan = ''
-      this.form.jabatan = ''
-      this.form.nama_karyawan = ''
-      this.form.id_penilai = ''
-      this.form.nama_penilai = ''
-      this.form.jabatan_penilai = ''
-      this.form.tgl_nilai = ''
-      this.form.ttl_nilai = ''
-      this.form.rata_nilai = ''
-      this.form.tipe = ''
-      this.form.status = ''
-      this.form.validasi_by = ''
-      this.form.created_by = ''
-      this.form.updated_by = ''
-      this.form.updated_at = ''
-      this.form.deleted_at = ''
-    },
-
-    resetValidation() {
-      this.validate = ''
-    },
-
-    setValidation(validation) {
-      this.validate = validation
-    },
-
-    setMethod(method) {
-      this.method = method
-    },
-
-    setIdKaryawan(id) {
-      this.form.id_karyawan = id
-    }
   }
 })

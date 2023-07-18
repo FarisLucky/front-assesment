@@ -30,31 +30,38 @@ ul li {
                     <span class="d-inline-block">
                         Detail Nilai Karyawan <strong class="text-primary">{{ $route.params.tipe }}</strong>
                     </span>
-                    <router-link :to="{ name: 'ListPenilaian' }" class="btn btn-sm btn-secondary">
-                        <CIcon :content="cilArrowCircleLeft" size="sm" />
-                        Kembali
-                    </router-link>
+                    <div>
+                        <router-link :to="{ name: 'ListPenilaian' }" class="btn btn-sm btn-secondary me-2">
+                            <CIcon :content="cilArrowCircleLeft" size="sm" />
+                            Kembali
+                        </router-link>
+                    </div>
                 </div>
             </CCardHeader>
             <CCardBody>
                 <CRow>
-                    <CCol :md="12" class="text-end">
-                        <CButton color="light" @click.prevent="onRefresh">
+                    <CCol :md="12" class="text-end mb-2">
+                        <CButton size="sm" color="light" @click.prevent="onRefresh">
                             <CIcon :content="cilSync" size="sm" />
                         </CButton>
                     </CCol>
                     <CCol :md="12" class="mb-2">
-                        <ul class="data-karyawan">
-                            <li>
-                                <span>Nama: <strong>{{ penilaian.nama_karyawan }}</strong></span>
-                            </li>
-                            <li>
-                                <span>Jabatan: <strong>{{ penilaian.jabatan }}</strong></span>
-                            </li>
-                            <li>
-                                <span>Penilaian: <strong>{{ penilaian.tipe }}</strong></span>
-                            </li>
-                        </ul>
+                        <div class="d-flex justify-content-between">
+                            <ul class="data-karyawan">
+                                <li>
+                                    <span>Nama: <strong>{{ penilaian.nama_karyawan }}</strong></span>
+                                </li>
+                                <li>
+                                    <span>Jabatan: <strong>{{ penilaian.jabatan }}</strong></span>
+                                </li>
+                                <li>
+                                    <span>Penilaian: <strong>{{ penilaian.tipe }}</strong></span>
+                                </li>
+                            </ul>
+                            <span class="d-inline-block">
+                                Tanggal Nilai: <strong>{{ penilaian.tgl_nilai }}</strong>
+                            </span>
+                        </div>
                     </CCol>
                     <CCol :md="12">
                         <table class="table" style="width: 100%; border-radius: 10px; border-collapse: collapse;">
@@ -202,7 +209,7 @@ ul li {
                                 <tr>
                                     <td>
                                         <div class="d-flex justify-content-between">
-                                            <a :href="'http://localhost/simpeg/pdf-view/' + id"
+                                            <a :href="'http://localhost/simpeg/pdf-view/' + penilaian.id"
                                                 class="btn btn-sm btn-warning" target="_blank">
                                                 Cetak Nilai 1
                                             </a>
@@ -268,8 +275,8 @@ export default {
 
         routeName() {
             return this.$route.params.tipe === 'pk_khusus'
-                ? 'ShowUmumHistory'
-                : 'ShowKhususHistory'
+                ? 'PenilaianProgressEdit'
+                : 'PenilaianProgressKhususEdit'
         },
     },
     methods: {
@@ -297,7 +304,7 @@ export default {
             this.loading(true)
 
             usePenilaianStore()
-                .showProgress(this.$route.params.id_penilaian)
+                .showProgress(this.$route.params.id_penilaian, this.$route.params.tipe)
                 .then((response) => {
                     console.log(response)
                     this.penilaian = response.data
