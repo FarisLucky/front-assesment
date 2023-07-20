@@ -43,8 +43,8 @@
                                                     <span>Nama: <strong>{{ karyawan.nama }}</strong></span>
                                                 </li>
                                                 <li>
-                                                    <span>Jabatan: <strong>{{ karyawan.relationship?.jabatan.nama
-                                                    }}</strong></span>
+                                                    <span>Jabatan: <strong>{{
+                                                        karyawan.relationship?.jabatan.nama }}</strong></span>
                                                 </li>
                                                 <li>
                                                     <span>Penilaian: <strong>{{ (tipe).toUpperCase() }}</strong></span>
@@ -59,10 +59,18 @@
                                                 <div class="col-md-3">
                                                     <v-select v-model="field.month" :options="months" label="name"
                                                         :reduce="m => m.id" placeholder="Pilih Bulan" />
+                                                    <div class="invalid-feedback d-inline-block"
+                                                        v-if="validate?.bulan_nilai">
+                                                        {{ validate?.bulan_nilai[0] }}
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <v-select v-model="field.year" :options="years" label="name"
-                                                        :reduce="m => m.id" placeholder="Pilih Tahun" />
+                                                    <v-select v-model="field.year" :options="years"
+                                                        placeholder="Pilih Tahun" />
+                                                    <div class="invalid-feedback d-inline-block"
+                                                        v-if="validate?.tahun_nilai">
+                                                        {{ validate?.tahun_nilai[0] }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -275,7 +283,8 @@ export default {
             nilai,
             months,
             years,
-            field
+            field,
+            validate: ''
         }
     },
     created() {
@@ -284,7 +293,7 @@ export default {
         this.newCurrent = new Date()
     },
     computed: {
-        ...mapState(usePenilaianStore, ['form', 'url', 'validate']),
+        ...mapState(usePenilaianStore, ['form', 'url']),
 
         ...mapState(useAuthStore, ['user']),
 
@@ -379,6 +388,7 @@ export default {
                 tahun_nilai: this.field.year,
             }
 
+            console.log(this.field)
             this.store(formRequest)
                 .then((response) => {
 
@@ -404,15 +414,20 @@ export default {
                 .catch((errors) => {
                     this.loading(false)
                     console.log(errors)
+                    if (errors.response.status == 422) {
+                        this.validate = errors.response.data.errors
+                    } else {
+                        this.showToast({
+                            show: true,
+                            classType: 'bg-danger',
+                            title: 'Gagal',
+                            msg: errors.response.data.data.message,
+                        })
 
-                    this.showToast({
-                        show: true,
-                        classType: 'bg-danger',
-                        title: 'Gagal',
-                        msg: errors.response.data.message,
-                    })
+                        this.resetValidation()
+                    }
 
-                    this.resetValidation()
+
                 })
         },
 

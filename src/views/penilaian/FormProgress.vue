@@ -86,7 +86,7 @@ ul li {
                                                                 sub_penilaian.sub_penilaian }}</span>
                                                             <div class="d-inline-block">
                                                                 <CFormInput type="number" size="sm"
-                                                                    :disabled="tipe.check_penilai < 1"
+                                                                    :disabled="tipe.id_karyawan != user.id_karyawan"
                                                                     v-model="sub_penilaian.nilai" />
                                                             </div>
                                                         </li>
@@ -110,7 +110,8 @@ ul li {
                                             <div class="panel-footer">
                                                 <div class="penilaian-catatan row">
                                                     <div class="item col-9">
-                                                        <CFormTextarea label="Catatan" rows="2" :disabled=true
+                                                        <CFormTextarea label="Catatan" rows="2"
+                                                            :disabled="tipe.id_karyawan != user.id_karyawan"
                                                             :value="tipe.catatan">
                                                         </CFormTextarea>
                                                     </div>
@@ -241,6 +242,7 @@ import { useUnitStore } from '@/store/unit'
 import { CButton } from '@coreui/vue'
 import { useToastStore } from '@/store/toast'
 import { usePenilaianStore } from '@/store/penilaian'
+import { useAuthStore } from '@/store/auth'
 
 export default {
     components: {
@@ -251,6 +253,8 @@ export default {
         params: Object,
     },
     data() {
+        const user = useAuthStore().user
+
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -262,6 +266,7 @@ export default {
             ttlNilai: 0,
             sumNilai: 0,
             avgNilai: 0,
+            user,
         }
     },
     computed: {
