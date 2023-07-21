@@ -16,7 +16,8 @@
                     <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
                         :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
                         v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
-                        v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll">
+                        v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll"
+                        theme="polar-bear">
                         <template #table-row="props">
                             <span v-if="props.column.field == 'action'">
                                 <a href="javascript:" @click.prevent="onShow({ id: props.row.id })">

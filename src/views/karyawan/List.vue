@@ -6,67 +6,35 @@
                     <span class="d-inline-block">
                         File Karyawan
                     </span>
-                    <router-link
-                        :to="{name:'tambah-karyawan'}"
-                        class="btn btn-sm btn-primary"
-                    >
-                        <CIcon
-                            :content="cilUserFollow"
-                            size="sm"
-                        />
+                    <router-link :to="{ name: 'tambah-karyawan' }" class="btn btn-sm btn-primary">
+                        <CIcon :content="cilUserFollow" size="sm" />
                         Tambah
                     </router-link>
                 </div>
             </CCardHeader>
             <CCardBody>
-                <vue-good-table
-                    mode="remote"
-                    :totalRows="totalRecords"
-                    :pagination-options="paginations"
-                    :isLoading="isLoading"
-                    :columns="columns"
-                    :rows="rows"
-                    :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange"
-                    v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter"
-                    v-on:sort-change="onSortChange"
-                    v-on:select-all="onSelectAll"
-                >
+                <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
+                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
+                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
+                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll"
+                    theme="polar-bear">
                     <template #table-actions>
-                        <CButton
-                            color="secondary"
-                            class="me-2"
-                            @click.prevent="deleteAll"
-                        >
-                            <CIcon
-                                :content="cilTrash"
-                                size="sm"
-                            />
+                        <CButton color="secondary" class="me-2" @click.prevent="deleteAll">
+                            <CIcon :content="cilTrash" size="sm" />
                         </CButton>
                     </template>
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
-                            <router-link :to="{ name: 'edit-karyawan', params: { id: props.row.id }}">
-                                <CIcon
-                                    :content="cilPencil"
-                                    size="sm"
-                                />
+                            <router-link :to="{ name: 'edit-karyawan', params: { id: props.row.id } }">
+                                <CIcon :content="cilPencil" size="sm" />
                             </router-link>
-                            <a
-                                href="javascript:"
-                                @click.prevent="
-                                      setModal(true);
-                                      setSize('sm');
-                                      setComponent('Delete');
-                                      setId(props.row.id);
-                                  "
-                                class="text-danger"
-                            >
-                                <CIcon
-                                    :content="cilTrash"
-                                    size="sm"
-                                />
+                            <a href="javascript:" @click.prevent="
+                                setModal(true);
+                            setSize('sm');
+                            setComponent('Delete');
+                            setId(props.row.id);
+                            " class="text-danger">
+                                <CIcon :content="cilTrash" size="sm" />
                             </a>
                         </span>
                     </template>

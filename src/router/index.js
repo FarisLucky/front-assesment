@@ -25,15 +25,15 @@ const routes = [
 
                 beforeEnter: (to, from) => {
                     // reject the navigation
-                    const auth = useAuthStore()
-                    useToastStore().showToast({
-                        // perlu login
-                        show: true,
-                        title: 'Notifikasi',
-                        msg: 'Selamat Datang ~ ' + auth.getUser().name + ' ~',
-                        classType: 'bg-info',
-                    })
-                    useToastStore().hideToast()
+                    // const auth = useAuthStore()
+                    // useToastStore().showToast({
+                    //     // perlu login
+                    //     show: true,
+                    //     title: 'Notifikasi',
+                    //     msg: 'Selamat Datang ~ ' + auth.getUser().name + ' ~',
+                    //     classType: 'bg-info',
+                    // })
+                    // useToastStore().hideToast()
                 },
             },
             {

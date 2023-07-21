@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import { url } from '@/config/http'
+import { http } from '@/config'
 
 // You can name the return value of `defineStore()` anything you want,
 // but it's best to use the name of the store and surround it with `use`
@@ -24,22 +24,19 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(request) {
       // await axios.get(url + 'http://localhost/simpeg/sanctum/csrf-cookie')
-      const user = await axios.post(url + '/login/', {
-        email: request.email,
-        password: request.password,
-        device_name: 'web'
-      });
+        const user = await http.post(url + '/login/', {
+            email: request.email,
+            password: request.password,
+            device_name: 'web'
+        });
 
-      return user
+        return user
     },
 
-    logout() {
-      this.user = null;
-      this.token = null;
+    async logout() {
+        const logout = await http.post(url+'/logout')
 
-      Cookies.remove('user')
-
-      return true
+        return logout
     },
 
     resetValidation() {

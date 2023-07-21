@@ -134,7 +134,8 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr v-if="routeParams.tipe == 'pk_umum'">
+                                    <tr v-if="routeParams.tipe == 'pk_umum' && user.karyawan.jabatan.level == 4">
+                                        <!-- apabila levelnya sebagai kepala unit -->
                                         <td>
                                             <div class="row">
                                                 <div class="col-12">
@@ -270,6 +271,8 @@ export default {
             countNilai: 0,
         }
 
+        const user = useAuthStore().user
+
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -284,7 +287,8 @@ export default {
             months,
             years,
             field,
-            validate: ''
+            validate: '',
+            user
         }
     },
     created() {

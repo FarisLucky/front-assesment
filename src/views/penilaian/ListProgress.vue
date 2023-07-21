@@ -23,7 +23,7 @@
         <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
             :columns="columns" :rows="rows" :select-options="{ enabled: true }" v-on:page-change="onPageChange"
             v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange"
-            v-on:select-all="onSelectAll">
+            v-on:select-all="onSelectAll" theme="polar-bear">
             <template #table-row="props">
                 <span v-if="props.column.field == 'tipe' && props.row.tipe == 'pk_umum'">
                     <span class="tipe">{{ props.row.tipe }}</span>
@@ -96,6 +96,13 @@ export default {
                     label: '#',
                     field: 'no',
                     sortable: false,
+                },
+                {
+                    label: 'Tanggal',
+                    field: 'tgl_nilai',
+                    filterOptions: {
+                        enabled: true,
+                    },
                 },
                 {
                     label: 'Nama',
