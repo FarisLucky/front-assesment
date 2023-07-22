@@ -6,12 +6,8 @@ export const useMSubStore = defineStore('m_sub', {
         id: '',
         form: {
             id_penilaian: '',
-            nama: [{
-                nama: '',
-                iterate: 1,
-            }],
+            nama: '',
             id_jabatan_penilai: '',
-            id_jabatan_kinerja: '',
             id_unit_penilai: '',
         },
         validate: '',
@@ -67,10 +63,7 @@ export const useMSubStore = defineStore('m_sub', {
 
         resetForm() {
             this.form.id_penilaian = ''
-            this.form.nama = [{
-                nama: '',
-                iterate: 1,
-            }]
+            this.form.nama = ''
             this.form.id_jabatan_penilai = ''
             this.form.id_jabatan_kinerja = ''
             this.form.id_unit_penilai = ''
@@ -86,6 +79,14 @@ export const useMSubStore = defineStore('m_sub', {
 
         setMethod(method) {
             this.method = method
+        },
+
+        setNama(nama) {
+            this.form.nama = nama
+        },
+
+        setNama(nama) {
+            this.form.nama = nama
         },
     },
 })

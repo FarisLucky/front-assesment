@@ -1,5 +1,5 @@
 <template>
-    <Form @fetch="onRefresh" :addBtn="btnStatus" @resetBtn="resetBtn"></Form>
+    <Form @fetch="onRefresh"></Form>
     <div>
         <CCard class="mb-4">
             <CCardHeader>

@@ -12,49 +12,41 @@
                 <input type="hidden" name="__method" v-model="method" />
                 <input type="hidden" name="id" v-if="method == 'PUT'" v-model="id" />
                 <CRow class="align-items-end">
-                    <CCol :md="12">
-                        <CButton type="submit" class="btn btn-sm btn-outline-info" @click.prevent="addNamaField"
-                            v-if="btnStatus">
-                            <CIcon :content="cilMedicalCross" size="sm" />
-                        </CButton>
-                        <CButton type="submit" class="btn btn-sm btn-outline-secondary" style="margin-left: 5px;"
-                            @click.prevent="removeNamaField">
-                            <CIcon :content="cilX" size="sm" />
-                        </CButton>
-                    </CCol>
-                    <CCol :md="3" v-for="(sub, idx) in subsNama" :key="sub.iterate">
+                    <CCol :md="3">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput id="nama" type="text" v-model="sub.nama" @keyup.ctrl.tab="onTab"
-                                @keyup.ctrl.delete="onTabRemove" />
+                            <CFormInput id="nama" type="text" size="sm" v-model="form.nama" autofocus />
                         </div>
                     </CCol>
-                    <CCol :md="12">
-                        <CRow>
-                            <CCol :md="3">
-                                <div class="mb-1">
-                                    <CFormLabel for="penilai">Jenis Penilaian</CFormLabel>
-                                    <v-select v-model="form.id_penilaian" :options="jenisPenilaianList"
-                                        :reduce="jp => jp.id">
-                                    </v-select>
-                                    <div class="invalid-feedback d-inline-block" v-if="validate?.id_penilaian">
-                                        {{ validate?.id_penilaian[0] }}
-                                    </div>
-                                </div>
-                            </CCol>
-                            <CCol :md="3">
-                                <div class="mb-1">
-                                    <CFormLabel for="penilai">Kategori</CFormLabel>
-                                    <v-select v-model="form.kategori" :options="kategories" :reduce="kat => kat.id">
-                                    </v-select>
-                                    <div class="invalid-feedback d-inline-block" v-if="validate?.kategori">
-                                        {{ validate?.kategori[0] }}
-                                    </div>
-                                </div>
-                            </CCol>
-                        </CRow>
+                    <CCol :md="2">
+                        <div class="mb-1">
+                            <CFormLabel for="penilai">Tipe Penilaian</CFormLabel>
+                            <v-select v-model="tipe" :options="listTipes">
+                            </v-select>
+                        </div>
                     </CCol>
-                    <CCol :md="12">
+                    <CCol :md="3">
+                        <div class="mb-1">
+                            <CFormLabel for="penilai">Jenis Penilaian</CFormLabel>
+                            <v-select v-model="form.id_penilaian" :options="jenisPenilaianList" :reduce="jp => jp.id">
+                            </v-select>
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.id_penilaian">
+                                {{ validate?.id_penilaian[0] }}
+                            </div>
+                        </div>
+                    </CCol>
+                    <CCol v-if="user.role == ADMIN" :md="3">
+                        <div class="mb-1">
+                            <CFormLabel for="penilai">Jabatan Penilai</CFormLabel>
+                            <v-select v-model="form.id_jabatan_penilai" :options="jabatanPenilaiList"
+                                :reduce="jab => jab.id">
+                            </v-select>
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.id_jabatan_penilai">
+                                {{ validate?.id_jabatan_penilai[0] }}
+                            </div>
+                        </div>
+                    </CCol>
+                    <CCol>
                         <div class="mb-1 text-start">
                             <CButton type="submit" color="primary" class="mt-1" style="margin-right: 7px;">
                                 <CIcon :content="cilSave" size="sm" />
@@ -88,62 +80,75 @@ import 'vue-datepicker-next/index.css'
 import { useSpinnerStore } from '@/store/spinner'
 import { useMPenilaianStore } from '@/store/m_penilaian'
 import { useMSubStore } from '@/store/m_sub'
+import { useAuthStore } from '@/store/auth'
+import { ADMIN, USER } from '@/store/auth'
 
 export default {
     components: {
         DatePicker,
     },
-    props: ['nama', 'addBtn'],
     data() {
+        const listTipes = [
+            'pk_khusus',
+            'pk_umum',
+        ];
+
+        const user = useAuthStore().user
+
+        const kategories = [
+            {
+                id: 0,
+                label: 'NON MEDIS',
+            },
+            {
+                id: 1,
+                label: 'MEDIS',
+            },
+        ]
+
         return {
             cilSave,
             cilSync,
             cilArrowCircleLeft,
             cilMedicalCross,
             cilX,
-            subsNama: [
-                {
-                    nama: '',
-                    iterate: 1,
-                },
-            ],
             iterate: 1,
             jenisPenilaianList: [],
             jabatanPenilaiList: [],
             jabatanKinerjaList: [],
             unitKinerjaList: [],
-            kategories: [
-                {
-                    id: 0,
-                    label: 'NON MEDIS',
-                },
-                {
-                    id: 1,
-                    label: 'MEDIS',
-                },
-            ],
-            btnStatus: true
+            tipe: '',
+            btnStatus: true,
+            kategories,
+            listTipes,
+            user,
+            ADMIN,
+            USER,
         }
     },
     mounted() {
         this.btnStatus = this.addBtn
     },
     watch: {
-        'addBtn'(newVal) {
-            this.btnStatus = newVal
-        }
-    },
-    created() {
-        this.getJenisPenilaianList()
-        this.getJabatanList()
+        'tipe'(newVal) {
+            if (newVal != null) {
+                this.getJenisPenilaianList(newVal)
+            } else {
+                this.jenisPenilaianList = []
+            }
+        },
     },
     computed: {
         ...mapState(useMSubStore, ['id', 'form', 'validate', 'method']),
+    },
+    created() {
+        this.getJabatanPenilaiList()
     },
     methods: {
         ...mapActions(useMSubStore, [
             'store',
             'update',
+            'setNama',
             'setMethod',
             'setValidation',
             'resetForm',
@@ -158,35 +163,11 @@ export default {
 
         ...mapActions(useSpinnerStore, ['loading']),
 
-        addNamaField() {
-            this.subsNama.push({
-                nama: '',
-                iterate: ++this.iterate,
-            })
-        },
-
-        onTab() {
-            this.addNamaField()
-        },
-
-        onTabRemove() {
-            if (this.subsNama.length > 1) {
-                this.subsNama.pop()
-            }
-        },
-
-        removeNamaField() {
-            if (this.iterate > 1) {
-                this.subsNama.pop()
-                iterate: this.iterate--
-            }
-        },
-
-        getJenisPenilaianList() {
+        getJenisPenilaianList(tipe) {
             useMPenilaianStore()
-                .fetchData()
+                .fetchDataByTipe(tipe)
                 .then((response) => {
-                    let data = response.data.data.map((val) => ({
+                    let data = response.data.map((val) => ({
                         id: val.id,
                         label: `${val.nama} - ${val.tipe}`,
                     }))
@@ -202,7 +183,7 @@ export default {
                 })
         },
 
-        getJabatanList() {
+        getJabatanPenilaiList() {
             useJabatanStore()
                 .fetchData()
                 .then((response) => {
@@ -211,7 +192,6 @@ export default {
                         label: val.nama_with_parent.toUpperCase(),
                     }))
                     this.jabatanPenilaiList = data
-                    this.jabatanKinerjaList = data
                 })
                 .catch((errors) => {
                     console.log(errors)
@@ -224,12 +204,15 @@ export default {
                 })
         },
 
+        tipeSelected() {
+            console.log('test')
+            this.getJenisPenilaianList()
+        },
+
         onSubmit() {
             this.loading(true)
 
             let action
-
-            this.form.nama = this.subsNama
 
             if (this.method == 'POST') {
                 action = this.store(this.form)
@@ -242,15 +225,14 @@ export default {
                     this.showToast({
                         show: true,
                         classType: 'bg-success',
-                        title: 'Berhasil ditambahkan !',
-                        msg: response.data,
+                        title: 'Tindakan Berhasil',
+                        msg: 'Berhasil ditambahkan !',
                     })
-                    this.resetForm() // reset form value
+                    this.setNama('')
                     this.resetValidation() // reset form validation
                     this.onRefresh()
                     this.setMethod('POST')
                     this.loading(false) // remove spinner loading
-                    this.$emit('resetBtn')
                 })
                 .catch((errors) => {
                     this.loading(false)
@@ -261,10 +243,9 @@ export default {
                             show: true,
                             classType: 'bg-danger',
                             title: 'Gagal',
-                            msg: errors?.response.data.message,
+                            msg: errors?.response.data,
                         })
 
-                        this.resetForm()
                         this.resetValidation()
                     }
                 })
@@ -274,19 +255,11 @@ export default {
             this.onRefresh()
             this.resetForm()
             this.resetValidation()
-            this.subsNama = [
-                {
-                    nama: '',
-                    iterate: 1,
-                },
-            ]
-            this.$emit('resetBtn')
+            this.jenisPenilaianList = []
         },
 
         onRefresh() {
             this.$emit('fetch')
-            this.getJenisPenilaianList()
-            this.getJabatanList()
         },
     },
 }

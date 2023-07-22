@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
 import { useAuthStore } from '@/store/auth'
-import { useToastStore } from '@/store/toast'
 
 const routes = [
     {
@@ -59,11 +58,19 @@ const routes = [
                 path: '/karyawans',
                 name: 'Karyawan',
                 component: () => import('@/views/karyawan/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'list-karyawan',
                         component: () => import('@/views/karyawan/List.vue'),
+                        meta:{
+                            roles: ['ADMIN','USER'],
+                            authRequired: true
+                        }
                     },
                     {
                         path: '/tambah',
@@ -81,11 +88,19 @@ const routes = [
                 path: '/jabatans',
                 name: 'Jabatans',
                 component: () => import('@/views/jabatan/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListJabatan',
                         component: () => import('@/views/jabatan/List.vue'),
+                        meta:{
+                            roles: ['ADMIN','USER'],
+                            authRequired: true
+                        }
                     },
                 ],
             },
@@ -93,11 +108,18 @@ const routes = [
                 path: '/units',
                 name: 'Units',
                 component: () => import('@/views/unit/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         component: () => import('@/views/unit/List.vue'),
                         name: 'ListUnit',
+                        meta:{
+                            roles: ['ADMIN','USER'],
+                        }
                     },
                 ],
             },
@@ -105,11 +127,18 @@ const routes = [
                 path: '/m-penilaians',
                 name: 'MasterPenilaians',
                 component: () => import('@/views/m_penilaian/Index.vue'),
+                meta:{
+                    roles: ['ADMIN'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListPenilaian',
                         component: () => import('@/views/m_penilaian/List.vue'),
+                        meta:{
+                            roles: ['ADMIN']
+                        }
                     },
                 ],
             },
@@ -117,11 +146,18 @@ const routes = [
                 path: '/m-sub-penilaians',
                 name: 'MasterSub',
                 component: () => import('@/views/m_sub/Index.vue'),
+                meta:{
+                    roles: ['ADMIN'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListSub',
                         component: () => import('@/views/m_sub/List.vue'),
+                        meta:{
+                            roles: ['ADMIN']
+                        }
                     },
                 ],
             },
@@ -129,11 +165,18 @@ const routes = [
                 path: '/m-valid-penilai',
                 name: 'MasterValidPenilai',
                 component: () => import('@/views/m_valid_penilai/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListSub',
                         component: () => import('@/views/m_valid_penilai/List.vue'),
+                        meta:{
+                            roles: ['ADMIN','USER']
+                        }
                     },
                 ],
             },
@@ -141,11 +184,18 @@ const routes = [
                 path: '/tipe',
                 name: 'MasterTipe',
                 component: () => import('@/views/m_tipe/Index.vue'),
+                meta:{
+                    roles: ['ADMIN'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListTipe',
                         component: () => import('@/views/m_tipe/List.vue'),
+                        meta:{
+                            roles: ['ADMIN']
+                        }
                     },
                 ],
             },
@@ -153,11 +203,18 @@ const routes = [
                 path: '/penilaian-karyawans',
                 name: 'PenilaianKaryawan',
                 component: () => import('@/views/penilaian/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListPenilaian',
                         component: () => import('@/views/penilaian/ProgressTab.vue'),
+                        meta:{
+                            roles: ['ADMIN','USER']
+                        }
                     },
                     {
                         path: '/nilai/:id_karyawan/:tipe',
@@ -175,11 +232,18 @@ const routes = [
                 path: '/history-penilaians',
                 name: 'HistoryPenilaian',
                 component: () => import('@/views/history/Index.vue'),
+                meta:{
+                    roles: ['ADMIN','USER'],
+                    authRequired: true
+                },
                 children: [
                     {
                         path: '',
                         name: 'ListHistoryPenilaian',
                         component: () => import('@/views/history/List.vue'),
+                        meta:{
+                            roles: ['ADMIN','USER']
+                        }
                     },
                     {
                         path: '/:id_karyawan/:tipe',
@@ -439,6 +503,9 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/views/auth/Login'),
+        meta:{
+            authRequired: false
+        },
         beforeEnter: (to, from) => {
             // reject the navigation
             const auth = useAuthStore()
@@ -462,6 +529,11 @@ const routes = [
                 path: '404',
                 name: 'Page404',
                 component: () => import('@/views/pages/Page404'),
+            },
+            {
+                path: '403',
+                name: 'Page403',
+                component: () => import('@/views/pages/Page403'),
             },
             {
                 path: '500',
@@ -495,17 +567,28 @@ router.beforeEach(async (to) => {
     if (authRequired && !auth.getLoggedIn()) {
         auth.returnUrl = to.fullPath
 
-        useToastStore().showToast({
-            // perlu login
-            show: true,
-            title: 'Notifikasi',
-            msg: 'Anda perlu login !',
-            classType: 'bg-warning',
-        })
-        useToastStore().hideToast()
-
         return '/login'
     }
 })
+
+router.beforeEach((to, from, next) => {
+    const auth = useAuthStore()
+    console.log(auth.getUser())
+    console.log(to)
+
+    if (to.meta.authRequired) {
+        if (!to.meta.roles.includes(auth.getUser().role)) {
+            console.log('test')
+        // if (to.matched.some((record) => record.meta.roles.includes(auth.getUser().role))) {
+            next('/pages/403');
+            return;
+        } else {
+            next();
+        }
+    } else {
+        next()
+    }
+
+});
 
 export default router

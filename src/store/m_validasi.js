@@ -5,7 +5,8 @@ export const useMValidasiStore = defineStore('m_validasi', {
   state: () => ({
     id: '',
     form: {
-      sub_penilaians: '',
+      sub_penilaians: [],
+      id_penilaian: '',
     },
     validate: '',
     url: '/m-validasi-penilai',
@@ -75,6 +76,10 @@ export const useMValidasiStore = defineStore('m_validasi', {
 
     setMethod(method) {
       this.method = method
+    },
+
+    setSubPenilaian(penilaian) {
+      this.form.sub_penilaians.push(penilaian)
     },
 
   },

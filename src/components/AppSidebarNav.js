@@ -9,6 +9,7 @@ import {
   CNavTitle,
 } from '@coreui/vue'
 import nav from '@/_nav.js'
+import { useAuthStore } from '@/store/auth'
 
 const normalizePath = (path) =>
   decodeURI(path)
@@ -51,6 +52,7 @@ const AppSidebarNav = defineComponent({
   },
   setup() {
     const route = useRoute()
+    const auth = useAuthStore()
     const firstRender = ref(true)
 
     onMounted(() => {
@@ -121,7 +123,9 @@ const AppSidebarNav = defineComponent({
           )
         : h(
             resolveComponent(item.component),
-            {},
+            {
+                visible: false
+            },
             {
               default: () => item.name,
             },

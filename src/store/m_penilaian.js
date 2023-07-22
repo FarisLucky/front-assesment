@@ -19,9 +19,15 @@ export const useMPenilaianStore = defineStore('m_penilaian', {
     },
 
     async fetchData() {
-      const jabatans = await http.get(this.url)
+      const penilaians = await http.get(this.url)
 
-      return jabatans
+      return penilaians
+    },
+
+    async fetchDataByTipe(tipe) {
+      const penilaians = await http.get(`${this.url}/${tipe}/search`)
+
+      return penilaians
     },
 
     async store() {

@@ -16,14 +16,28 @@
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
                             <VueMultiselect v-model="form.sub_penilaians" :options="subPenilains" label="nama" track-by="id"
-                                :multiple="true">
+                                :taggable="true" @tag="addSub">
                             </VueMultiselect>
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.sub_penilaians">
+                                {{ validate?.sub_penilaians[0] }}
+                            </div>
+                        </div>
+                    </CCol>
+                    <CCol :md="3">
+                        <div class="mb-1">
+                            <CFormLabel for="penilai">Jenis Penilaian</CFormLabel>
+                            <v-select v-model="form.id_penilaian" :options="jenisPenilaianList" :reduce="jp => jp.id">
+                            </v-select>
+                            <div class="invalid-feedback d-inline-block" v-if="validate?.id_penilaian">
+                                {{ validate?.id_penilaian[0] }}
+                            </div>
                         </div>
                     </CCol>
                     <CCol :md="3">
                         <div class="mb-1">
                             <CFormLabel for="penilai">Jabatan Penilai</CFormLabel>
-                            <CFormInput type="text" :value="idJabatanPenilai.karyawan.jabatan.nama" :disabled="true" />
+                            <CFormInput type="text" :value="idJabatanPenilai.karyawan.jabatan.nama" :disabled="true"
+                                size="sm" />
                         </div>
                     </CCol>
                     <CCol>
@@ -61,6 +75,7 @@ import { useMSubStore } from '@/store/m_sub'
 import VueMultiselect from 'vue-multiselect'
 import { useAuthStore } from '@/store/auth'
 import { useMValidasiStore } from '@/store/m_validasi'
+import { useMPenilaianStore } from '@/store/m_penilaian'
 
 export default {
     components: {
@@ -78,19 +93,13 @@ export default {
             cilMedicalCross,
             cilX,
             idJabatanPenilai,
+            jenisPenilaianList: [],
             subPenilains: [],
-        }
-    },
-    mounted() {
-        this.btnStatus = this.addBtn
-    },
-    watch: {
-        'addBtn'(newVal) {
-            this.btnStatus = newVal
         }
     },
     created() {
         this.getSubPenilaians()
+        this.getJenisPenilaianList('pk_khusus')
     },
     computed: {
         ...mapState(useMValidasiStore, ['id', 'form', 'validate', 'method']),
@@ -101,6 +110,7 @@ export default {
             'update',
             'setMethod',
             'setValidation',
+            'setSubPenilaian',
             'resetForm',
             'resetValidation',
         ]),
@@ -118,6 +128,26 @@ export default {
                         nama: `${val.nama} ( ${val.relationship?.penilaian.nama} )`,
                     }))
                     this.subPenilains = data
+                })
+                .catch((errors) => {
+                    this.showToast({
+                        show: true,
+                        classType: 'bg-danger',
+                        title: 'Gagal',
+                        msg: errors.response.data.message,
+                    })
+                })
+        },
+
+        getJenisPenilaianList(tipe) {
+            useMPenilaianStore()
+                .fetchDataByTipe(tipe)
+                .then((response) => {
+                    let data = response.data.map((val) => ({
+                        id: val.id,
+                        label: `${val.nama} - ${val.tipe}`,
+                    }))
+                    this.jenisPenilaianList = data
                 })
                 .catch((errors) => {
                     this.showToast({
@@ -167,8 +197,8 @@ export default {
                             msg: errors?.response.data.message,
                         })
 
-                        // this.resetForm()
-                        // this.resetValidation()
+                        this.resetForm()
+                        this.resetValidation()
                     }
                 })
         },
@@ -182,6 +212,15 @@ export default {
         onRefresh() {
             this.$emit('fetch')
             this.getSubPenilaians()
+        },
+
+        addSub(newVal) {
+
+            this.form.sub_penilaians = {
+                id: 0,
+                nama: newVal,
+            }
+            this.onSubmit()
         },
     },
 }

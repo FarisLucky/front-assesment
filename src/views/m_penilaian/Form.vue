@@ -15,7 +15,7 @@
                     <CCol :md="3">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput id="nama" type="text" v-model="form.nama" />
+                            <CFormInput id="nama" type="text" size="sm" v-model="form.nama" />
                             <div class=" invalid-feedback d-inline-block" v-if="validate?.nama">
                                 {{ validate?.nama[0] }}
                             </div>
@@ -34,7 +34,7 @@
                     <CCol :md="1">
                         <div class="mb-1">
                             <CFormLabel for="nama">Bobot</CFormLabel>
-                            <CFormInput id="nama" type="number" v-model="form.bobot" />
+                            <CFormInput id="nama" type="number" size="sm" v-model="form.bobot" />
                             <div class="invalid-feedback d-inline-block" v-if="validate?.bobot">
                                 {{ validate?.bobot[0] }}
                             </div>

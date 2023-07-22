@@ -186,14 +186,14 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="text-end" v-if="penilaian.kategori == 1">
+                                        <div class="text-end" v-if="penilaian.tipe == 'pk_umum'">
                                             <!-- Penilaian khusus  medis -->
                                             <a :href="'http://localhost/simpeg/pdf-view/' + id"
                                                 class="btn btn-sm btn-warning" target="_blank">
                                                 Cetak Nilai
                                             </a>
                                         </div>
-                                        <div class="text-end" v-if="penilaian.kategori == 0">
+                                        <div class="text-end" v-if="penilaian.tipe == 'pk_khusus'">
                                             <!-- Penilaian khusus non medis -->
                                             <a :href="'http://localhost/simpeg/pdf-khusus/' + id"
                                                 class="btn btn-sm btn-warning" target="_blank">

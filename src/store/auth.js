@@ -7,6 +7,10 @@ import { http } from '@/config'
 // but it's best to use the name of the store and surround it with `use`
 // and `Store` (e.g. `useUserStore`, `useCartStore`, `useProductStore`)
 // the first argument is a unique id of the store across your application
+
+export const ADMIN = 'ADMIN'
+export const USER = 'USER'
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     cookies: Cookies.get('user'),

@@ -210,10 +210,24 @@ ul li {
                                 <tr>
                                     <td>
                                         <div class="d-flex justify-content-between">
-                                            <a :href="'http://localhost/simpeg/pdf-view/' + penilaian.id"
+                                            <!-- <a :href="'http://localhost/simpeg/pdf-view/' + penilaian.id"
                                                 class="btn btn-sm btn-warning" target="_blank">
                                                 Cetak Nilai 1
-                                            </a>
+                                            </a> -->
+                                            <div class="text-end" v-if="penilaian.tipe == 'pk_umum'">
+                                                <!-- Penilaian khusus  medis -->
+                                                <a :href="'http://localhost/simpeg/pdf-view/' + penilaian.id"
+                                                    class="btn btn-sm btn-warning" target="_blank">
+                                                    Cetak Nilai
+                                                </a>
+                                            </div>
+                                            <div class="text-end" v-if="penilaian.tipe == 'pk_khusus'">
+                                                <!-- Penilaian khusus non medis -->
+                                                <a :href="'http://localhost/simpeg/pdf-khusus/' + penilaian.id"
+                                                    class="btn btn-sm btn-warning" target="_blank">
+                                                    Cetak Nilai
+                                                </a>
+                                            </div>
                                             <CButton type="submit" color="primary" @click.prevent="onUpdate">
                                                 <CIcon :content="cilSave" size="sm" />
                                                 Simpan

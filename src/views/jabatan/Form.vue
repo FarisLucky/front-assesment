@@ -15,7 +15,7 @@
                     <CCol :md="4">
                         <div class="mb-1">
                             <CFormLabel for="nama">Nama</CFormLabel>
-                            <CFormInput id="nama" type="text" v-model="form.nama" autofocus />
+                            <CFormInput id="nama" type="text" v-model="form.nama" size="sm" autofocus />
                             <div class="invalid-feedback d-inline-block" v-if="validate?.nama">
                                 {{ validate?.nama[0] }}
                             </div>
