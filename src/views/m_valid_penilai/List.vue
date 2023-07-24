@@ -162,7 +162,6 @@ export default {
                     this.form.id_jabatan_kinerja =
                         response.data.id_jabatan_penilai
                     this.form.id_unit_penilai = response.data.id_unit_penilai
-                    console.log(this.form)
 
                     this.setId(response.data.id)
                     this.setMethod('PUT')

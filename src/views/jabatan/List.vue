@@ -12,6 +12,11 @@
             </div>
         </CCardHeader>
         <CCardBody>
+            <div class="text-end">
+                <a href="http://localhost/simpeg/jabatan/cetak/" target="_blank" class="btn btn-sm btn-warning mb-2">
+                    <CIcon :content="cilPrint" size="sm" />
+                </a>
+            </div>
             <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations" :isLoading="isLoading"
                 :columns="columns" :rows="rows" :select-options="{ enabled: true }" :sort-options="{
                     initialSortBy: { field: 'updated_at', type: 'desc' }
@@ -41,7 +46,7 @@
 <script>
 import Form from './Form.vue'
 import Modal from './Modal.vue'
-import { cilPencil, cilTrash, cilUserFollow, cilSync } from '@coreui/icons'
+import { cilPencil, cilTrash, cilUserFollow, cilSync, cilPrint } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
@@ -60,6 +65,7 @@ export default {
             cilTrash,
             cilUserFollow,
             cilSync,
+            cilPrint,
             isLoading: true,
             serverParams: {
                 columnFilters: {},

@@ -21,7 +21,7 @@ import { mapState } from 'pinia'
 import { useModalStore } from '@/store/modal'
 import { useSpinnerStore } from '@/store/spinner'
 import { useToastStore } from '@/store/toast'
-import { useMSubStore } from '@/store/m_sub'
+import { useMValidasiStore } from '@/store/m_validasi'
 
 export default {
     name: 'Delete',
@@ -32,10 +32,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(useMSubStore, ['id']),
+        ...mapState(useMValidasiStore, ['id']),
     },
     methods: {
-        ...mapActions(useMSubStore, ['destroy']),
+        ...mapActions(useMValidasiStore, ['destroy']),
 
         ...mapActions(useModalStore, ['setModal']),
 

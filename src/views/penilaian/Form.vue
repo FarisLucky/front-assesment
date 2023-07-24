@@ -123,7 +123,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="panel-footer">
+                                                <div class="panel-footer"
+                                                    v-if="routeParams.tipe == 'pk_umum' && user.karyawan.jabatan.level == 4">
                                                     <div class="penilaian-catatan">
                                                         <CFormTextarea label="Catatan" rows="2"
                                                             text="Silahkan diisi apabila terdapat catatan"
@@ -132,6 +133,30 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="routeParams.tipe == 'pk_khusus'">
+                                        <td>
+                                            <CRow>
+                                                <CCol :md="4">
+                                                    <CFormTextarea label="Catatan" rows="3"
+                                                        text="Silahkan diisi apabila terdapat catatan"
+                                                        v-model="form.catatan">
+                                                    </CFormTextarea>
+                                                </CCol>
+                                                <CCol :md="4">
+                                                    <CFormTextarea label="Tanggapan dari Pegawai yang dinilai" rows="3"
+                                                        text="Silahkan diisi apabila terdapat catatan"
+                                                        v-model="form.penilai">
+                                                    </CFormTextarea>
+                                                </CCol>
+                                                <CCol :md="4">
+                                                    <CFormTextarea label="Komentar Kepala Seksi ata Tanggapan" rows="3"
+                                                        text="Silahkan diisi apabila terdapat catatan"
+                                                        v-model="form.dinilai">
+                                                    </CFormTextarea>
+                                                </CCol>
+                                            </CRow>
                                         </td>
                                     </tr>
                                     <tr v-if="routeParams.tipe == 'pk_umum' && user.karyawan.jabatan.level == 4">
@@ -388,6 +413,7 @@ export default {
                 penilaians: this.penilaians,
                 tipe: this.$route.params.tipe,
                 analisis_swot: this.form,
+                comment: this.form,
                 bulan_nilai: this.field.month,
                 tahun_nilai: this.field.year,
             }
