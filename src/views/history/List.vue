@@ -1,3 +1,11 @@
+<style>
+.jabatan {
+    background-color: rgba(11, 102, 106, .7);
+    color: white;
+    padding: .3rem .4rem;
+    border-radius: 3px;
+}
+</style>
 <template>
     <div>
         <CCard class="mb-4">
@@ -19,6 +27,9 @@
                     v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll"
                     theme="polar-bear">
                     <template #table-row="props">
+                        <span v-if="props.column.field == 'relationship.jabatan.nama'">
+                            <span class="jabatan">{{ props.row.relationship.jabatan.nama }}</span>
+                        </span>
                         <span v-if="props.column.field == 'action'">
                             <router-link
                                 :to="{ name: 'ShowUmumHistory', params: { id_karyawan: props.row.id, tipe: tipe } }"
@@ -129,7 +140,7 @@ export default {
                 },
                 {
                     label: 'Jabatan',
-                    field: 'relationship.jabatans.nama',
+                    field: 'relationship.jabatan.nama',
                     filterOptions: {
                         enabled: true,
                     },

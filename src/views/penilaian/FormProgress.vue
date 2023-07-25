@@ -235,6 +235,15 @@ ul li {
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr v-if="user.role == 'ADMIN'">
+                                        <td>
+                                            <div class="text-end">
+                                                <CButton color="success" @click.prevent="onValidasi">
+                                                    <CIcon :content="cilCheck" />
+                                                </CButton>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <div class="d-flex justify-content-between">
@@ -244,20 +253,22 @@ ul li {
                                             </a> -->
                                                 <div class="text-end" v-if="penilaian.tipe == 'pk_umum'">
                                                     <!-- Penilaian khusus  medis -->
-                                                    <a :href="'http://localhost/simpeg/pdf-view/' + penilaian.id"
-                                                        class="btn btn-sm btn-warning" target="_blank">
+                                                    <a :href="urlUmum + penilaian.id" class="btn btn-sm btn-warning"
+                                                        target="_blank">
+                                                        <CIcon :content="cilPrint" />
                                                         Cetak Nilai
                                                     </a>
                                                 </div>
                                                 <div class="text-end" v-if="penilaian.tipe == 'pk_khusus'">
                                                     <!-- Penilaian khusus non medis -->
-                                                    <a :href="'http://localhost/simpeg/pdf-khusus/' + penilaian.id"
-                                                        class="btn btn-sm btn-warning" target="_blank">
+                                                    <a :href="urlKhusus + penilaian.id" class="btn btn-sm btn-warning"
+                                                        target="_blank">
+                                                        <CIcon :content="cilPrint" />
                                                         Cetak Nilai
                                                     </a>
                                                 </div>
                                                 <CButton type="submit" color="primary" @click.prevent="onUpdate">
-                                                    <CIcon :content="cilSave" size="sm" />
+                                                    <CIcon :content="cilSave" size="sm" class="text-white" />
                                                     Simpan
                                                 </CButton>
                                             </div>
@@ -273,7 +284,7 @@ ul li {
     </div>
 </template>
 <script>
-import { cilSave, cilSync, cilArrowCircleLeft } from '@coreui/icons'
+import { cilSave, cilSync, cilArrowCircleLeft, cilCheck, cilPrint } from '@coreui/icons'
 import { mapActions } from 'pinia'
 import { mapState } from 'pinia'
 import { useHistoryStore } from '@/store/history_penilaian'
@@ -286,6 +297,7 @@ import { CButton } from '@coreui/vue'
 import { useToastStore } from '@/store/toast'
 import { usePenilaianStore } from '@/store/penilaian'
 import { useAuthStore } from '@/store/auth'
+import { url_print } from '@/config/http'
 
 export default {
     components: {
@@ -297,11 +309,15 @@ export default {
     },
     data() {
         const user = useAuthStore().user
+        const urlUmum = url_print + "/pdf-view/"
+        const urlKhusus = url_print + "/pdf-khusus/"
 
         return {
             cilSave,
             cilArrowCircleLeft,
             cilSync,
+            cilCheck,
+            cilPrint,
             penilaian: [],
             detail: [],
             month: new Date().getUTCMonth() + 1,
@@ -310,6 +326,8 @@ export default {
             sumNilai: 0,
             avgNilai: 0,
             user,
+            urlUmum,
+            urlKhusus,
         }
     },
     computed: {
@@ -414,6 +432,45 @@ export default {
                     this.resetValidation()
                 })
         },
+
+        onValidasi() {
+            this.loading(true)
+
+            if (confirm('Apakah Ingin divalidasi ?')) {
+                usePenilaianStore()
+                    .validasiNilai(this.$route.params.id_penilaian)
+                    .then(response => {
+                        this.loading(false)
+
+                        this.showToast({
+                            show: true,
+                            classType: 'bg-success',
+                            title: 'Tindakan Berhasil',
+                            msg: 'Nilai sudah terisi',
+                        })
+                        this.$router.back();
+                    })
+                    .catch(errors => {
+
+                        this.loading(false)
+
+                        this.showToast({
+                            show: true,
+                            classType: 'bg-danger',
+                            title: 'Gagal',
+                            msg: errors.response.data.message,
+                        })
+
+                        this.resetValidation()
+                    })
+            }
+        },
+        setNilai(event, subNilai, nilai) {
+            console.log(event.target.value)
+            subNilai = parseInt(event.target.value)
+            console.log(subNilai)
+            nilai += subNilai
+        }
     },
     beforeRouteEnter(to, from, next) {
         next((vm) => vm.onRefresh())

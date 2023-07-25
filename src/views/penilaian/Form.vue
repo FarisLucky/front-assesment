@@ -98,8 +98,9 @@
                                                                         sub_penilaian.nama }}</span>
                                                                     <div class="d-inline-block">
                                                                         <CFormInput type="number" size="sm"
-                                                                            v-model="sub_penilaian.nilai"
-                                                                            :ttlNilai="ttlNilai" :disabled="tipe.check < 1"
+                                                                            :value="sub_penilaian.nilai"
+                                                                            @input="event => sub_penilaian.nilai = event.target.value"
+                                                                            :disabled="tipe.check < 1"
                                                                             :countNilai="nilai.countNilai = ++idx" />
                                                                     </div>
                                                                 </li>
@@ -108,8 +109,8 @@
                                                                 <span class="d-inline-block"
                                                                     style="width: 80%;">Jumlah</span>
                                                                 <div class="d-inline-block">
-                                                                    <CFormInput type="number" size="sm" :readonly="true"
-                                                                        v-model="nilai.ttlNilai" />
+                                                                    <CFormInput type="number" size="sm" :disabled="true"
+                                                                        v-model="countNilai[penilaian.id]" />
                                                                 </div>
                                                             </div>
                                                             <div class="penilaian-avg">
@@ -117,7 +118,7 @@
                                                                     style="width: 80%;">Rata-rata</span>
                                                                 <div class="d-inline-block">
                                                                     <CFormInput type="number" size="sm" :readonly="true"
-                                                                        v-model="nilai.ttlNilai" />
+                                                                        :value="nilai.ttlNilai" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -296,8 +297,6 @@ export default {
             countNilai: 0,
         }
 
-        const user = useAuthStore().user
-
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -313,7 +312,7 @@ export default {
             years,
             field,
             validate: '',
-            user
+            countNilai: []
         }
     },
     created() {
@@ -361,10 +360,16 @@ export default {
             this.getPenilaian(params)
                 .then((response) => {
                     this.penilaians = response.data.data
+                    response.data.data.forEach(p => {
+                        p.relationship.m_penilaian.forEach(mp => {
+                            this.countNilai.push({
+                                [mp.id]: 0
+                            })
+                        })
+                    })
                     this.loading(false)
                 })
                 .catch((errors) => {
-                    console.log(errors)
                     this.loading(false)
                     this.showToast({
                         show: true,
@@ -383,13 +388,10 @@ export default {
             useKaryawansStore()
                 .show(params.id_karyawan)
                 .then((response) => {
-                    console.log(response.data)
                     this.karyawan = response.data
-                    console.log(this.karyawan.nama)
                     this.loading(false)
                 })
                 .catch((errors) => {
-                    console.log(errors)
                     this.loading(false)
                     this.showToast({
                         show: true,
@@ -418,11 +420,9 @@ export default {
                 tahun_nilai: this.field.year,
             }
 
-            console.log(this.field)
             this.store(formRequest)
                 .then((response) => {
 
-                    console.log(response)
 
                     this.loading(false)
 
@@ -443,7 +443,6 @@ export default {
                 })
                 .catch((errors) => {
                     this.loading(false)
-                    console.log(errors)
                     if (errors.response.status == 422) {
                         this.validate = errors.response.data.errors
                     } else {
@@ -470,6 +469,18 @@ export default {
                 },
             }
         },
+
+        // setNilai(event, nilai, penilaianId) {
+        //     console.log(event)
+        //     console.log(nilai)
+        //     console.log(penilaianId)
+        //     // this.countNilai[penilaianId] += parseInt(nilai)
+        //     this.countNilai.forEach(n => {
+        //         n[penilaianId] = nilai
+        //         return nilai
+        //     })
+        //     console.log(this.countNilai)
+        // },
 
         ttlNilai(param) {
             this.nilai.ttlNilai += param

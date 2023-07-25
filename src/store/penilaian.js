@@ -73,6 +73,12 @@ export const usePenilaianStore = defineStore('penilaian', {
       return penilaian
     },
 
+    async validasiNilai(id){
+        const validasi = await http.post(`${this.url}/validasi/admin`, {id: id})
+
+        return validasi
+    },
+
     resetForm() {
       this.form.kelebihan = ''
       this.form.kesempatan = ''

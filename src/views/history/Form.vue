@@ -188,15 +188,13 @@
                                     <td>
                                         <div class="text-end" v-if="penilaian.tipe == 'pk_umum'">
                                             <!-- Penilaian khusus  medis -->
-                                            <a :href="'http://localhost/simpeg/pdf-view/' + id"
-                                                class="btn btn-sm btn-warning" target="_blank">
+                                            <a :href="urlUmum + id" class="btn btn-sm btn-warning" target="_blank">
                                                 Cetak Nilai
                                             </a>
                                         </div>
                                         <div class="text-end" v-if="penilaian.tipe == 'pk_khusus'">
                                             <!-- Penilaian khusus non medis -->
-                                            <a :href="'http://localhost/simpeg/pdf-khusus/' + id"
-                                                class="btn btn-sm btn-warning" target="_blank">
+                                            <a :href="urlKhusus + id" class="btn btn-sm btn-warning" target="_blank">
                                                 Cetak Nilai
                                             </a>
                                         </div>
@@ -222,6 +220,7 @@ import { useSpinnerStore } from '@/store/spinner'
 import { useUnitStore } from '@/store/unit'
 import { CButton } from '@coreui/vue'
 import { useToastStore } from '@/store/toast'
+import { url_print } from '@/config/http'
 
 export default {
     components: {
@@ -286,6 +285,9 @@ export default {
             }
         ]
 
+        const urlUmum = url_print + "/pdf-view/"
+        const urlKhusus = url_print + " /pdf-khusus/"
+
         return {
             cilSave,
             cilArrowCircleLeft,
@@ -297,7 +299,9 @@ export default {
             ttlNilai: 0,
             id: 0,
             penilaians: [],
-            nilai: ''
+            nilai: '',
+            urlUmum,
+            urlKhusus,
         }
     },
     computed: {
