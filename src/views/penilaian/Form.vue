@@ -110,7 +110,7 @@
                                                                     style="width: 80%;">Jumlah</span>
                                                                 <div class="d-inline-block">
                                                                     <CFormInput type="number" size="sm" :disabled="true"
-                                                                        v-model="countNilai[penilaian.id]" />
+                                                                        v-model="nilai.ttlNilai" />
                                                                 </div>
                                                             </div>
                                                             <div class="penilaian-avg">

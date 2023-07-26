@@ -2,14 +2,18 @@
     <div>
         <CCard class="mb-4">
             <CCardHeader>
-                <div class="d-flex justify-content-between">
-                    <span class="d-inline-block">
-                        File Karyawan
-                    </span>
-                    <router-link :to="{ name: 'tambah-karyawan' }" class="btn btn-sm btn-primary">
+                <span class="d-inline-block">
+                    File Karyawan
+                </span>
+                <div class="text-end">
+                    <router-link :to="{ name: 'tambah-karyawan' }" class="btn btn-sm btn-primary me-2">
                         <CIcon :content="cilUserFollow" size="sm" />
                         Tambah
                     </router-link>
+                    <CButton color="success" variant="outline" @click.prevent="uploadModal">
+                        <CIcon :content="cilCloudUpload" size="sm" />
+                        Upload
+                    </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
@@ -47,7 +51,7 @@
 <script>
 import Toast from '../../components/Toast.vue'
 import Modal from './Modal.vue'
-import { cilPencil, cilTrash, cilUserFollow } from '@coreui/icons'
+import { cilPencil, cilTrash, cilUserFollow, cilCloudUpload } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useKaryawansStore } from '@/store/karyawans'
@@ -66,6 +70,7 @@ export default {
             cilPencil,
             cilTrash,
             cilUserFollow,
+            cilCloudUpload,
             isLoading: true,
             serverParams: {
                 columnFilters: {},
@@ -168,6 +173,13 @@ export default {
             'setTitle',
             'setComponent',
         ]),
+
+        uploadModal() {
+            this.setModal(true)
+            this.setTitle('Excel')
+            this.setSize('xl')
+            this.setComponent('Excel')
+        },
 
         async fetchData() {
             let query = queryString.stringify(

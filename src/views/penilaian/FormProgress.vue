@@ -448,9 +448,17 @@ export default {
                             title: 'Tindakan Berhasil',
                             msg: 'Nilai sudah terisi',
                         })
-                        this.$router.back();
+
+                        this.$router.push({
+                            name: 'ShowUmumHistory',
+                            params: {
+                                id_karyawan: this.penilaian.id_karyawan,
+                                tipe: this.penilaian.tipe,
+                            }
+                        });
                     })
                     .catch(errors => {
+                        console.log(errors)
 
                         this.loading(false)
 
@@ -458,19 +466,13 @@ export default {
                             show: true,
                             classType: 'bg-danger',
                             title: 'Gagal',
-                            msg: errors.response.data.message,
+                            msg: errors.response?.data?.message,
                         })
 
                         this.resetValidation()
                     })
             }
         },
-        setNilai(event, subNilai, nilai) {
-            console.log(event.target.value)
-            subNilai = parseInt(event.target.value)
-            console.log(subNilai)
-            nilai += subNilai
-        }
     },
     beforeRouteEnter(to, from, next) {
         next((vm) => vm.onRefresh())

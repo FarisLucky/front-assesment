@@ -1,21 +1,12 @@
 <template>
-    <CModal
-        ref="modal"
-        :visible="modal"
-        @close="setModal(false)"
-        :size="size"
-        scrollable
-    >
+    <CModal ref="modal" :visible="modal" @close="setModal(false)" :size="size" scrollable>
         <CModalHeader>
             <CModalTitle>{{ title }}</CModalTitle>
         </CModalHeader>
         <CModalBody>
             <Error v-if="nError">
                 <strong>{{ nError.message }}</strong>
-                <div
-                    v-for="(error, idx) in nError.errors"
-                    :key="idx"
-                >
+                <div v-for="(error, idx) in nError.errors" :key="idx">
                     <span>{{ error[0] }}</span>
                 </div>
             </Error>
@@ -27,6 +18,7 @@
 import Add from './Add.vue'
 import Delete from './Delete.vue'
 import Edit from './Edit.vue'
+import Excel from './Excel.vue'
 import Error from '@/components/Error.vue'
 import { useModalStore } from '@/store/modal'
 import { mapActions, mapState } from 'pinia'
@@ -36,6 +28,7 @@ export default {
         Add,
         Edit,
         Delete,
+        Excel,
         Error,
     },
     props: {

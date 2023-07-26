@@ -286,7 +286,7 @@ export default {
         ]
 
         const urlUmum = url_print + "/pdf-view/"
-        const urlKhusus = url_print + " /pdf-khusus/"
+        const urlKhusus = url_print + "/pdf-khusus/"
 
         return {
             cilSave,
