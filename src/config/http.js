@@ -1,8 +1,16 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const url = "http://192.168.3.234/simpeg/api"; //WEB APACHE
-const url_print = "http://192.168.3.234/simpeg"; //WEB APACHE
+/**
+ * LOCAL ENV
+ */
+// const url = "http://192.168.3.24/simpeg/api"; //WEB APACHE
+// const url_print = "http://192.168.3.24/simpeg"; //WEB APACHE
+/**
+ * PROD ENV
+ */
+const url = "https://assesment.gsrs.my.id/backend/api"; //WEB APACHE
+const url_print = "https://assesment.gsrs.my.id/backend"; //WEB APACHE
 // const url = "http://localhost/simpeg/api"; //WEB APACHE
 // const baseUrl = "http://localhost:8000/api"; // PHP LIVE SERVER
 

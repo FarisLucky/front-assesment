@@ -27,8 +27,8 @@
                     v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll"
                     theme="polar-bear">
                     <template #table-row="props">
-                        <span v-if="props.column.field == 'relationship.jabatan.nama'">
-                            <span class="jabatan">{{ props.row.relationship.jabatan.nama }}</span>
+                        <span v-if="props.column.field == 'relationship.jabatan?.nama'">
+                            <span class="jabatan">{{ props.row.relationship.jabatan?.nama }}</span>
                         </span>
                         <span v-if="props.column.field == 'action'">
                             <router-link

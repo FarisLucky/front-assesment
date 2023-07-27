@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+    <div class="bg-light min-vh-100 d-flex flex-row align-items-center" style="background-color: #DBC4F0 !important;">
         <CContainer>
             <CRow class="justify-content-center">
                 <CCol :md="4">
@@ -7,32 +7,36 @@
                         <CCard class="p-4">
                             <CCardBody>
                                 <CForm @submit.prevent="onSubmit()" autocomplete="off">
-                                    <h1>Login</h1>
-                                    <p class="text-medium-emphasis">Sign In to your account</p>
-                                    <CInputGroup class="mb-3">
-                                        <CInputGroupText>
-                                            <CIcon icon="cil-user" />
-                                        </CInputGroupText>
-                                        <CFormInput type="email" placeholder="Email" autocomplete="Email"
-                                            v-model="form.email" />
-                                        <div class="invalid-feedback d-inline-block" v-if="validate?.email">
-                                            {{ validate?.email[0] }}
-                                        </div>
-                                    </CInputGroup>
-                                    <CInputGroup class="mb-4">
-                                        <CInputGroupText>
-                                            <CIcon icon="cil-lock-locked" />
-                                        </CInputGroupText>
-                                        <CFormInput type="password" placeholder="Password" v-model="form.password" />
-                                        <div class="invalid-feedback d-inline-block" v-if="validate?.password">
-                                            {{ validate?.password[0] }}
-                                        </div>
-                                    </CInputGroup>
-                                    <CRow>
-                                        <CCol :xs="6">
-                                            <CButton type="submit" color="primary" class="px-4"> Login </CButton>
-                                        </CCol>
-                                    </CRow>
+                                    <h1>Log In</h1>
+                                    <p class="text-medium-emphasis">Silakan lengkapi data berikut</p>
+                                    <div class="mb-1">
+                                        <CFormLabel>Nip</CFormLabel>
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <CIcon icon="cil-user" />
+                                            </CInputGroupText>
+                                            <CFormInput type="text" placeholder="Email" autocomplete="Email"
+                                                v-model="form.email" />
+                                            <div class="invalid-feedback d-inline-block" v-if="validate?.email">
+                                                {{ validate?.email[0] }}
+                                            </div>
+                                        </CInputGroup>
+                                    </div>
+                                    <div class="mb-1">
+                                        <CFormLabel>Password</CFormLabel>
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <CIcon icon="cil-lock-locked" />
+                                            </CInputGroupText>
+                                            <CFormInput type="password" placeholder="Password" v-model="form.password" />
+                                            <div class="invalid-feedback d-inline-block" v-if="validate?.password">
+                                                {{ validate?.password[0] }}
+                                            </div>
+                                        </CInputGroup>
+                                    </div>
+                                    <div class="mt-2">
+                                        <CButton type="submit" color="primary" class="px-4"> Login </CButton>
+                                    </div>
                                 </CForm>
                             </CCardBody>
                         </CCard>

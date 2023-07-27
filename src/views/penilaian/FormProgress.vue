@@ -297,7 +297,6 @@ import { CButton } from '@coreui/vue'
 import { useToastStore } from '@/store/toast'
 import { usePenilaianStore } from '@/store/penilaian'
 import { useAuthStore } from '@/store/auth'
-import { url_print } from '@/config/http'
 
 export default {
     components: {
@@ -309,8 +308,8 @@ export default {
     },
     data() {
         const user = useAuthStore().user
-        const urlUmum = url_print + "/pdf-view/"
-        const urlKhusus = url_print + "/pdf-khusus/"
+        const urlUmum = "/backend/pdf-view/"
+        const urlKhusus = "/backend/pdf-khusus/"
 
         return {
             cilSave,

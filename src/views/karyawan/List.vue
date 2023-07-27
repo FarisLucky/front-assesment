@@ -10,23 +10,16 @@
                         <CIcon :content="cilUserFollow" size="sm" />
                         Tambah
                     </router-link>
-                    <CButton color="success" variant="outline" @click.prevent="uploadModal">
-                        <CIcon :content="cilCloudUpload" size="sm" />
-                        Upload
+                    <CButton color="light" @click.prevent="onRefresh">
+                        <CIcon :content="cilSync" size="sm" />
                     </CButton>
                 </div>
             </CCardHeader>
             <CCardBody>
                 <vue-good-table mode="remote" :totalRows="totalRecords" :pagination-options="paginations"
-                    :isLoading="isLoading" :columns="columns" :rows="rows" :select-options="{ enabled: true }"
-                    v-on:page-change="onPageChange" v-on:per-page-change="onPerPageChange"
-                    v-on:column-filter="onColumnFilter" v-on:sort-change="onSortChange" v-on:select-all="onSelectAll"
-                    theme="polar-bear">
-                    <template #table-actions>
-                        <CButton color="secondary" class="me-2" @click.prevent="deleteAll">
-                            <CIcon :content="cilTrash" size="sm" />
-                        </CButton>
-                    </template>
+                    :isLoading="isLoading" :columns="columns" :rows="rows" v-on:page-change="onPageChange"
+                    v-on:per-page-change="onPerPageChange" v-on:column-filter="onColumnFilter"
+                    v-on:sort-change="onSortChange" v-on:select-all="onSelectAll" :line-numbers="true" theme="polar-bear">
                     <template #table-row="props">
                         <span v-if="props.column.field == 'action'">
                             <router-link :to="{ name: 'edit-karyawan', params: { id: props.row.id } }">
@@ -51,7 +44,7 @@
 <script>
 import Toast from '../../components/Toast.vue'
 import Modal from './Modal.vue'
-import { cilPencil, cilTrash, cilUserFollow, cilCloudUpload } from '@coreui/icons'
+import { cilPencil, cilTrash, cilUserFollow, cilCloudUpload, cilSync } from '@coreui/icons'
 import { VueGoodTable } from 'vue-good-table-next'
 import { mapActions, mapState } from 'pinia'
 import { useKaryawansStore } from '@/store/karyawans'
@@ -71,6 +64,7 @@ export default {
             cilTrash,
             cilUserFollow,
             cilCloudUpload,
+            cilSync,
             isLoading: true,
             serverParams: {
                 columnFilters: {},
@@ -98,11 +92,6 @@ export default {
             fetchUrl: null,
             columns: [
                 {
-                    label: '#',
-                    field: 'no',
-                    sortable: false,
-                },
-                {
                     label: 'Nama',
                     field: 'nama',
                     filterOptions: {
@@ -116,18 +105,18 @@ export default {
                         enabled: true,
                     },
                 },
-                {
-                    label: 'Sex',
-                    field: 'sex',
-                    sortable: false,
-                },
-                {
-                    label: 'Tgl Lahir',
-                    field: 'tgl_lahir',
-                    filterOptions: {
-                        enabled: false,
-                    },
-                },
+                // {
+                //     label: 'Sex',
+                //     field: 'sex',
+                //     sortable: false,
+                // },
+                // {
+                //     label: 'Tgl Lahir',
+                //     field: 'tgl_lahir',
+                //     filterOptions: {
+                //         enabled: false,
+                //     },
+                // },
                 {
                     label: 'Alamat',
                     field: 'alamat',
@@ -218,6 +207,9 @@ export default {
                     })
                     this.loading(false)
                 })
+        },
+        onRefresh() {
+            this.fetchData()
         },
 
         updateParams(newProps) {
